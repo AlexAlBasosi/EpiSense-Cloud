@@ -1,7 +1,7 @@
 var mySQLConnection = require('../models/model');
 
 mySQLConnection.connect(function(error){    
-    if(!!error){
+    if(error){
         console.log('Error making connection to database.')
         } else {
             console.log('Connection to database made.');
@@ -10,11 +10,10 @@ mySQLConnection.connect(function(error){
 
 exports.get_all_records = function(req, res){
 
-    var result;
-
     console.log("Querying from the database...");
-    mySQLConnection.query("SELECT * FROM records", function(error, rows, fields){
-        if(!!error) {
+    var sql = "SELECT * FROM records";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
             console.log("Query failed.");
         } else {
             console.log("Query successful.");
@@ -32,7 +31,20 @@ exports.get_all_records = function(req, res){
             }
             
             res.json(recordJson);
+            res.sendStatus(200);
         }
     });
+};
 
+exports.add_a_record = function(req, res){
+    console.log("Adding to the database...");
+    var sql = "INSERT INTO records (ID, Name) VALUES (4, 'Jane Doe')";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error){
+            console.log("Error posting to database.");
+        } else {
+            console.log("1 record inserted.");
+            res.sendStatus(200);
+        }
+    });
 };
