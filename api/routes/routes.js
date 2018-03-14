@@ -2,6 +2,7 @@ module.exports = function(app) {
 
     //var controller = require('');
 
-  //  app.route('/')
+   /* app.route('/records')
+      .get()*/
 
 };
