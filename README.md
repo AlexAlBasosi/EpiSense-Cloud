@@ -26,4 +26,5 @@ Node.js: [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
         This runs the server normally, and any changes to the source code requires you to restart the server.
 
 
-And that's it! Thank you for using this application.
+
+And that's it! The Mobile Application and Machine Learning components are coming soon.
