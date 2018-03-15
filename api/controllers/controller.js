@@ -31,14 +31,18 @@ exports.get_all_records = function(req, res){
             }
             
             res.json(recordJson);
-            res.sendStatus(200);
         }
     });
 };
 
 exports.add_a_record = function(req, res){
+
+    var id = req.query.ID;
+    var name = req.query.Name;
+
     console.log("Adding to the database...");
-    var sql = "INSERT INTO records (ID, Name) VALUES (4, 'Jane Doe')";
+    var sql = "INSERT INTO records (ID, Name) VALUES ('" + id + "', '" + name  + "')";
+    console.log(sql);
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error){
             console.log("Error posting to database.");
@@ -46,5 +50,5 @@ exports.add_a_record = function(req, res){
             console.log("1 record inserted.");
             res.sendStatus(200);
         }
-    });
+    });  
 };

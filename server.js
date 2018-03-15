@@ -9,3 +9,4 @@ var routes = require('./api/routes/routes');
 routes(app);
 
 app.listen(port);
+console.log("Server running on port " + port + "...");
