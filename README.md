@@ -1,11 +1,11 @@
-#EpiSense
+# EpiSense
 
-##Prerequisites
+## Prerequisites
 In order to run this program, you need to have Node.js and NPM (Node Package Manager) installed. NPM is automatically installed when you install Node.js. You can install it from the following link:
 
 Node.js: [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
-##Running the Server
+## Running the Server
 
 1. Clone this repository to your machine. If you don't have git installed on your computer, you can download as a .zip file and unzip it to the directory of your choice.
 
