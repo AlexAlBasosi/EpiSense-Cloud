@@ -17,11 +17,11 @@ Node.js: [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
 3. Once all the dependencies are installed, you can run it in two ways:
 
-   * `nodemon server.js`
+* `nodemon server.js`
 
    nodemon is a package which automatically restarts the server when changes are saved. This is good for the development phase, and as such is stored as a `devDependency` in the `package.json` file.
 
-   * `node server.js`
+* `node server.js`
 
    This runs the server normally, and any changes to the source code requires you to restart the server.
 
