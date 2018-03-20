@@ -6,4 +6,6 @@ module.exports = function(app) {
       .get(controller.get_all_records)
       .post(controller.add_a_record)
 
+   // app.route('/records')
+
 };

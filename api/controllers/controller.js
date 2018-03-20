@@ -11,7 +11,7 @@ mySQLConnection.connect(function(error){
 exports.get_all_records = function(req, res){
 
     console.log("Querying from the database...");
-    var sql = "SELECT * FROM records";
+    var sql = "SELECT * FROM patientinfo";
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error) {
             console.log("Query failed.");
@@ -24,8 +24,17 @@ exports.get_all_records = function(req, res){
 
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
-                    "id": rows[i].ID,
-                    "name": rows[i].Name
+                    "patient_id": rows[i].patient_id,
+                    "patient_password": rows[i].patient_password,
+                    "first_name": rows[i].first_name,
+                    "last_name": rows[i].last_name,
+                    "email": rows[i].email,
+                    "gender": rows[i].gender,
+                    "age": rows[i].age,
+                    "date_of_birth": rows[i].date_of_birth,
+                    "contact_number": rows[i].contact_number,
+                    "address": rows[i].address,
+                    "emergency_contact_id": rows[i].emergency_contact_id
                 }
             }
 
