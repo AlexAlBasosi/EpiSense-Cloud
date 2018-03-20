@@ -73,3 +73,90 @@ exports.sign_up = function(req, res){
         }
     });  
 };
+
+exports.get_specific_record = function(req, res){
+    console.log("Querying from database...");
+    var id = req.params.patientID;
+
+    var sql = "SELECT * FROM patientinfo WHERE patientinfo.patient_id = " + id;
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error){
+            console.log("Query failed.");
+            console.log(error);
+        } else {
+
+            var sql = "SELECT * FROM patientinfo";
+
+                console.log("Query successful.");
+
+                if(rows.length > 0){
+
+                    var recordJson = {
+                        "patient_id": rows[0].patient_id,
+                        "patient_password": rows[0].patient_password,
+                        "first_name": rows[0].first_name,
+                        "last_name": rows[0].last_name,
+                        "email": rows[0].email,
+                        "gender": rows[0].gender,
+                        "age": rows[0].age,
+                        "date_of_birth": rows[0].date_of_birth,
+                        "contact_number": rows[0].contact_number,
+                        "address": rows[0].address,
+                        "emergency_contact_id": rows[0].emergency_contact_id
+                    }
+
+                    var jsonObj = {
+                        "Patients": recordJson
+                    }
+
+                    res.json(jsonObj);
+
+                } else {
+                    res.sendStatus(404);
+                }
+        }
+    });
+};
+
+exports.update_profile = function(req, res){
+    console.log("Updating record...");
+    var id = req.params.patientID;
+    var firstName = req.query.first_name;
+    var lastName = req.query.last_name;
+    var email = req.query.email;
+    var gender = req.query.gender;
+    var age = req.query.age;
+    var date_of_birth = req.query.date_of_birth;
+    var contact_number = req.query.contact_number;
+    var address = req.query.address;
+    var emergency_contact_id = req.query.emergency_contact_id;
+
+    console.log(id);
+
+
+    var sql = "UPDATE patientinfo SET \
+         first_name = '" + firstName + "'\
+         last_name = '" + lastName + "'\
+         email = '" + email + "'\
+         gender = '" + gender + "'\
+         age = " + age + "\
+         date_of_birth = " + date_of_birth + "\
+         contact_number = '" + contact_number + "'\
+         address = '" + address + "'\
+         emergency_contact_id = " + emergency_contact_id + "\
+     WHERE patient_id = " + id;
+
+     console.log(sql);
+
+     mySQLConnection.query(sql, function(error, rows, fields){
+        if(error){
+            console.log("Query failed.");
+            console.log(error);
+        } else {
+            console.log("Profile updated.");
+            res.sendStatus(200);
+        }
+    });
+
+
+};
