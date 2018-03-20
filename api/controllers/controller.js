@@ -1,4 +1,6 @@
 var mySQLConnection = require('../models/model');
+var hash = require('js-sha256');
+var crypto = require('crypto');
 
 mySQLConnection.connect(function(error){    
     if(error){
@@ -47,17 +49,24 @@ exports.get_all_records = function(req, res){
     });
 };
 
-exports.add_a_record = function(req, res){
+exports.sign_up = function(req, res){
 
-    var id = req.query.ID;
-    var name = req.query.Name;
+    var patientId = req.query.patient_id;
+
+    var sha256 = crypto.createHash("sha256");
+    sha256.update(req.query.patient_password, "utf8");
+    var password = sha256.digest("base64");
+    console.log("Hashed password is " + password);
 
     console.log("Adding to the database...");
-    var sql = "INSERT INTO records (ID, Name) VALUES ('" + id + "', '" + name  + "')";
+    var sql = "INSERT INTO patientinfo (patient_id, patient_password) VALUES ('" + patientId + "', '" + password + "')";
+
     console.log(sql);
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error){
             console.log("Error posting to database.");
+            console.log(error);
+            res.sendStatus(500);
         } else {
             console.log("1 record inserted.");
             res.sendStatus(200);

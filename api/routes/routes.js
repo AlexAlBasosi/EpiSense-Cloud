@@ -4,8 +4,8 @@ module.exports = function(app) {
 
     app.route('/patients')
       .get(controller.get_all_records)
-      .post(controller.add_a_record)
+      .post(controller.sign_up)
 
-   // app.route('/records')
-
+  /*  app.route('/patients/:patientID')
+      .get(controller.get_specific_record)*/
 };
