@@ -21,7 +21,6 @@ exports.get_all_records = function(req, res){
             console.log(rows);
 
             var recordJson = [rows.length];
-            var json;
 
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
@@ -29,8 +28,12 @@ exports.get_all_records = function(req, res){
                     "name": rows[i].Name
                 }
             }
-            
-            res.json(recordJson);
+
+            var jsonObj = {
+                "Patients": recordJson
+            }
+
+            res.json(jsonObj);
         }
     });
 };
