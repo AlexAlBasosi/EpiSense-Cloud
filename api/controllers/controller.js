@@ -135,18 +135,18 @@ exports.update_profile = function(req, res){
 
 
     var sql = "UPDATE patientinfo SET \
-         first_name = '" + firstName + "'\
-         last_name = '" + lastName + "'\
-         email = '" + email + "'\
-         gender = '" + gender + "'\
-         age = " + age + "\
-         date_of_birth = " + date_of_birth + "\
-         contact_number = '" + contact_number + "'\
-         address = '" + address + "'\
+         first_name = '" + firstName + "',\
+         last_name = '" + lastName + "',\
+         email = '" + email + "',\
+         gender = '" + gender + "',\
+         age = " + age + ",\
+         date_of_birth = " + date_of_birth + ",\
+         contact_number = '" + contact_number + "',\
+         address = '" + address + "',\
          emergency_contact_id = " + emergency_contact_id + "\
      WHERE patient_id = " + id;
 
-     console.log(sql);
+     console.log("Your SQL:" + sql);
 
      mySQLConnection.query(sql, function(error, rows, fields){
         if(error){
