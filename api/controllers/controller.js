@@ -53,10 +53,10 @@ exports.sign_up = function(req, res){
 
     var patientId = req.query.patient_id;
 
+    //hashes the password and stores it as a hash
     var sha256 = crypto.createHash("sha256");
     sha256.update(req.query.patient_password, "utf8");
     var password = sha256.digest("base64");
-    console.log("Hashed password is " + password);
 
     console.log("Adding to the database...");
     var sql = "INSERT INTO patientinfo (patient_id, patient_password) VALUES ('" + patientId + "', '" + password + "')";
@@ -131,9 +131,6 @@ exports.update_profile = function(req, res){
     var address = req.query.address;
     var emergency_contact_id = req.query.emergency_contact_id;
 
-    console.log(id);
-
-
     var sql = "UPDATE patientinfo SET \
          first_name = '" + firstName + "',\
          last_name = '" + lastName + "',\
@@ -146,17 +143,69 @@ exports.update_profile = function(req, res){
          emergency_contact_id = " + emergency_contact_id + "\
      WHERE patient_id = " + id;
 
-     console.log("Your SQL:" + sql);
-
      mySQLConnection.query(sql, function(error, rows, fields){
         if(error){
             console.log("Query failed.");
             console.log(error);
+            res.sendStatus(500);
         } else {
             console.log("Profile updated.");
             res.sendStatus(200);
         }
     });
+};
 
+exports.login = function(req, res){
 
+    var patientId = req.query.patient_id;
+
+    //hashes the password and stores it as a hash
+    var sha256 = crypto.createHash("sha256");
+    sha256.update(req.query.patient_password, "utf8");
+    var password = sha256.digest("base64");
+
+    var sql = "SELECT * FROM patientinfo";
+    mySQLConnection.query(sql, function(error, rows, fields){
+
+        var recordJson = [rows.length];
+
+        for(var i = 0; i < rows.length; i++){
+            recordJson[i] = {
+                "patient_id": rows[i].patient_id,
+                "patient_password": rows[i].patient_password,
+                "first_name": rows[i].first_name,
+                "last_name": rows[i].last_name,
+                "email": rows[i].email,
+                "gender": rows[i].gender,
+                "age": rows[i].age,
+                "date_of_birth": rows[i].date_of_birth,
+                "contact_number": rows[i].contact_number,
+                "address": rows[i].address,
+                "emergency_contact_id": rows[i].emergency_contact_id
+            }
+        }
+    
+        /*for(var i = 0; i < rows.length; i++){
+            console.log("\n\nPatient ID: " + rows[i].patient_id);
+            console.log("Patient Password: " + rows[i].patient_password);
+            console.log("First Name: " + rows[i].first_name);
+            console.log("Last Name: " + rows[i].last_name);
+            console.log("Email: " + rows[i].email);
+            console.log("Gender: " + rows[i].gender);
+            console.log("Age: " + rows[i].age);
+            console.log("Date of Birth: " + rows[i].date_of_birth);
+            console.log("Contact Number: " + rows[i].contact_number);
+            console.log("Address: " + rows[i].address);
+            console.log("Emergency Contact ID: " + rows[i].emergency_contact_id);
+        }*/
+
+        for(var i = 0; i < rows.length; i++){
+            if(recordJson[i].patient_id == patientId){
+                console.log("User found");
+            } else {
+                console.log("User not found.");
+            }
+        }
+
+    });
 };

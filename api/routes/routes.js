@@ -8,5 +8,8 @@ module.exports = function(app) {
 
     app.route('/patients/:patientID')
       .get(controller.get_specific_record)
-      .put(controller.update_profile);
+      .put(controller.update_profile)
+
+    app.route('/patients/login')
+      .post(controller.login)
 };
