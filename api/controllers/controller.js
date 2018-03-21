@@ -54,7 +54,7 @@ exports.sign_up = function(req, res){
     var patientId = req.query.patient_id;
     var email = req.query.email;
     var firstName = req.query.first_name;
-    var lastName = req.query.lastName;
+    var lastName = req.query.last_name;
 
     //hashes the password and stores it as a hash
     var sha256 = crypto.createHash("sha256");
@@ -96,7 +96,9 @@ exports.get_specific_record = function(req, res){
 
                 if(rows.length > 0){
 
-                    var recordJson = {
+                    var recordJson = [1];
+
+                    recordJson[0] = {
                         "patient_id": rows[0].patient_id,
                         "patient_password": rows[0].patient_password,
                         "first_name": rows[0].first_name,
@@ -205,28 +207,27 @@ exports.login = function(req, res){
         var emailExists = false;
         var passwordMatch = false;
 
+        var pid;
+
         for(var i = 0; i < rows.length; i++){
             if(recordJson[i].email == email){
                 emailExists = true;
 
                 if (recordJson[i].patient_password == password){
                     passwordMatch = true;
+                    pid = recordJson[i].patient_id;
                 }
             } 
         }
 
-        var message;
-
+        pid = pid + "";
 
         if(emailExists && passwordMatch){
-            message = "1"; //user authenticated
-        } else if(emailExists && !passwordMatch){
-            message = "0"; //password incorrect
-        } else {
-            message = "2"; //email or password incorrect
+            res.send(pid); //user authenticated
+        } else if (emailExists && !passwordMatch){
+            res.sendStatus(403); //password incorrect
         }
-
-        res.send(message);
 
     });
 };
+
