@@ -160,7 +160,7 @@ exports.update_profile = function(req, res){
 
 exports.login = function(req, res){
 
-    var patientId = req.query.patient_id;
+    var email = req.query.email;
 
     //hashes the password and stores it as a hash
     var sha256 = crypto.createHash("sha256");
@@ -202,12 +202,12 @@ exports.login = function(req, res){
             console.log("Emergency Contact ID: " + rows[i].emergency_contact_id);
         }*/
 
-        var idExists = false;
+        var emailExists = false;
         var passwordMatch = false;
 
         for(var i = 0; i < rows.length; i++){
-            if(recordJson[i].patient_id == patientId){
-                idExists = true;
+            if(recordJson[i].email == email){
+                emailExists = true;
 
                 if (recordJson[i].patient_password == password){
                     passwordMatch = true;
@@ -218,9 +218,9 @@ exports.login = function(req, res){
         var message;
 
 
-        if(idExists && passwordMatch){
+        if(emailExists && passwordMatch){
             message = "1"; //user authenticated
-        } else if(idExists && !passwordMatch){
+        } else if(emailExists && !passwordMatch){
             message = "0"; //password incorrect
         } else {
             message = "2"; //email or password incorrect
