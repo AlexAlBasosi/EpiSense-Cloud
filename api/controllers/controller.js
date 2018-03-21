@@ -52,14 +52,19 @@ exports.get_all_records = function(req, res){
 exports.sign_up = function(req, res){
 
     var patientId = req.query.patient_id;
+    var email = req.query.email;
+    var firstName = req.query.first_name;
+    var lastName = req.query.lastName;
 
     //hashes the password and stores it as a hash
     var sha256 = crypto.createHash("sha256");
     sha256.update(req.query.patient_password, "utf8");
     var password = sha256.digest("base64");
 
+
     console.log("Adding to the database...");
-    var sql = "INSERT INTO patientinfo (patient_id, patient_password) VALUES ('" + patientId + "', '" + password + "')";
+    var sql = "INSERT INTO patientinfo (patient_id, patient_password, first_name, last_name, email) VALUES ('\
+    " + patientId + "', '" + password + "', '" + firstName + "', '" + lastName + "', '" + email + "')";
 
     console.log(sql);
     mySQLConnection.query(sql, function(error, rows, fields){
@@ -123,7 +128,6 @@ exports.update_profile = function(req, res){
     var id = req.params.patientID;
     var firstName = req.query.first_name;
     var lastName = req.query.last_name;
-    var email = req.query.email;
     var gender = req.query.gender;
     var age = req.query.age;
     var date_of_birth = req.query.date_of_birth;
@@ -134,7 +138,6 @@ exports.update_profile = function(req, res){
     var sql = "UPDATE patientinfo SET \
          first_name = '" + firstName + "',\
          last_name = '" + lastName + "',\
-         email = '" + email + "',\
          gender = '" + gender + "',\
          age = " + age + ",\
          date_of_birth = " + date_of_birth + ",\
@@ -216,18 +219,14 @@ exports.login = function(req, res){
 
 
         if(idExists && passwordMatch){
-            message = "User authenticated.";
+            message = "1"; //user authenticated
         } else if(idExists && !passwordMatch){
-            message = "Password incorrect.";
+            message = "0"; //password incorrect
         } else {
-            message = "Username or password incorrect."; 
+            message = "2"; //email or password incorrect
         }
 
-        var jsonResponse = {
-            "response": message
-        }
-        
-        res.json(jsonResponse);
+        res.send(message);
 
     });
 };
