@@ -199,13 +199,35 @@ exports.login = function(req, res){
             console.log("Emergency Contact ID: " + rows[i].emergency_contact_id);
         }*/
 
+        var idExists = false;
+        var passwordMatch = false;
+
         for(var i = 0; i < rows.length; i++){
             if(recordJson[i].patient_id == patientId){
-                console.log("User found");
-            } else {
-                console.log("User not found.");
-            }
+                idExists = true;
+
+                if (recordJson[i].patient_password == password){
+                    passwordMatch = true;
+                }
+            } 
         }
+
+        var message;
+
+
+        if(idExists && passwordMatch){
+            message = "User authenticated.";
+        } else if(idExists && !passwordMatch){
+            message = "Password incorrect.";
+        } else {
+            message = "Username or password incorrect."; 
+        }
+
+        var jsonResponse = {
+            "response": message
+        }
+        
+        res.json(jsonResponse);
 
     });
 };
