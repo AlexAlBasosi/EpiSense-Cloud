@@ -10,6 +10,7 @@ mySQLConnection.connect(function(error){
         }
 });
 
+//queries patientinfo table
 exports.get_all_records = function(req, res){
 
     console.log("Querying from the database...");
@@ -27,16 +28,46 @@ exports.get_all_records = function(req, res){
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "patient_id": rows[i].patient_id,
-                    "patient_password": rows[i].patient_password,
                     "first_name": rows[i].first_name,
                     "last_name": rows[i].last_name,
-                    "email": rows[i].email,
                     "gender": rows[i].gender,
                     "age": rows[i].age,
                     "date_of_birth": rows[i].date_of_birth,
                     "contact_number": rows[i].contact_number,
                     "address": rows[i].address,
                     "emergency_contact_id": rows[i].emergency_contact_id
+                }
+            }
+
+            var jsonObj = {
+                "Patients": recordJson
+            }
+
+            res.json(jsonObj);
+        }
+    });
+};
+
+//queries logindetails table
+exports.get_login_details = function(req, res){
+
+    console.log("Querying from the database...");
+    var sql = "SELECT * FROM logindetails";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            console.log(rows);
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "email": rows[i].email,
+                    "patient_password": rows[i].patient_password
                 }
             }
 
@@ -63,20 +94,34 @@ exports.sign_up = function(req, res){
 
 
     console.log("Adding to the database...");
-    var sql = "INSERT INTO patientinfo (patient_id, patient_password, first_name, last_name, email) VALUES ('\
-    " + patientId + "', '" + password + "', '" + firstName + "', '" + lastName + "', '" + email + "')";
+    var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name) VALUES ('\
+    " + patientId + "', '" + firstName + "', '" + lastName + "')";
 
-    console.log(sql);
-    mySQLConnection.query(sql, function(error, rows, fields){
+    var successFlag = false;
+
+    mySQLConnection.query(insertIntoPatientInfoTable, function(error, rows, fields){
         if(error){
-            console.log("Error posting to database.");
+            console.log("Error posting to patientinfo table.");
             console.log(error);
             res.sendStatus(500);
         } else {
-            console.log("1 record inserted.");
-            res.sendStatus(200);
+            console.log("1 record inserted into patientinfo table.");
+            
+            var insertIntoLoginDetailsTable = "INSERT INTO logindetails (patient_id, email, patient_password) VALUES('\
+            " + patientId + "', '" + email + "', '" + password + "')";
+
+            mySQLConnection.query(insertIntoLoginDetailsTable, function(error, rows, fields){
+                if(error){
+                    console.log("Error posting to logindetails table.");
+                    console.log(error);
+                    res.sendStatus(500);
+                } else {
+                    console.log("1 record inserted into logindetails table.");
+                    res.sendStatus(200);
+                }
+            });
         }
-    });  
+    }); 
 };
 
 exports.get_specific_record = function(req, res){
@@ -100,10 +145,8 @@ exports.get_specific_record = function(req, res){
 
                     recordJson[0] = {
                         "patient_id": rows[0].patient_id,
-                        "patient_password": rows[0].patient_password,
                         "first_name": rows[0].first_name,
                         "last_name": rows[0].last_name,
-                        "email": rows[0].email,
                         "gender": rows[0].gender,
                         "age": rows[0].age,
                         "date_of_birth": rows[0].date_of_birth,
@@ -169,7 +212,7 @@ exports.login = function(req, res){
     sha256.update(req.query.patient_password, "utf8");
     var password = sha256.digest("base64");
 
-    var sql = "SELECT * FROM patientinfo";
+    var sql = "SELECT * FROM logindetails";
     mySQLConnection.query(sql, function(error, rows, fields){
 
         var recordJson = [rows.length];
@@ -177,32 +220,16 @@ exports.login = function(req, res){
         for(var i = 0; i < rows.length; i++){
             recordJson[i] = {
                 "patient_id": rows[i].patient_id,
-                "patient_password": rows[i].patient_password,
-                "first_name": rows[i].first_name,
-                "last_name": rows[i].last_name,
                 "email": rows[i].email,
-                "gender": rows[i].gender,
-                "age": rows[i].age,
-                "date_of_birth": rows[i].date_of_birth,
-                "contact_number": rows[i].contact_number,
-                "address": rows[i].address,
-                "emergency_contact_id": rows[i].emergency_contact_id
+                "patient_password": rows[i].patient_password   
             }
         }
     
-        /*for(var i = 0; i < rows.length; i++){
+        for(var i = 0; i < rows.length; i++){
             console.log("\n\nPatient ID: " + rows[i].patient_id);
-            console.log("Patient Password: " + rows[i].patient_password);
-            console.log("First Name: " + rows[i].first_name);
-            console.log("Last Name: " + rows[i].last_name);
             console.log("Email: " + rows[i].email);
-            console.log("Gender: " + rows[i].gender);
-            console.log("Age: " + rows[i].age);
-            console.log("Date of Birth: " + rows[i].date_of_birth);
-            console.log("Contact Number: " + rows[i].contact_number);
-            console.log("Address: " + rows[i].address);
-            console.log("Emergency Contact ID: " + rows[i].emergency_contact_id);
-        }*/
+            console.log("Patient Password: " + rows[i].patient_password);
+        }
 
         var emailExists = false;
         var passwordMatch = false;
@@ -224,21 +251,12 @@ exports.login = function(req, res){
 
         if(emailExists && passwordMatch){
             res.send(pid); //user authenticated
-        } else if (emailExists && !passwordMatch){
+        } else {
             res.sendStatus(403); //password incorrect
-        }
+        } 
 
     });
 };
-
-/*exports.delete_all_records = function(req, res){
-    
-    var dropTable = "DROP TABLE patientinfo";
-    var createTable = "CREATE TABLE patientinfo (\
-    patient_id int(11)\
-    );"
-    mySQLConnection.query("DROP TABLE patientinfo");
-};*/
 
 
 exports.delete_specific_record = function(req, res){
