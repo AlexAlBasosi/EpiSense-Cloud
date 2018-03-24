@@ -231,3 +231,25 @@ exports.login = function(req, res){
     });
 };
 
+/*exports.delete_all_records = function(req, res){
+    
+    var dropTable = "DROP TABLE patientinfo";
+    var createTable = "CREATE TABLE patientinfo (\
+    patient_id int(11)\
+    );"
+    mySQLConnection.query("DROP TABLE patientinfo");
+};*/
+
+
+exports.delete_specific_record = function(req, res){
+
+    var patientID = req.params.patientID;
+
+    var sql = "DELETE FROM patientinfo WHERE patient_id=" + patientID;
+    mySQLConnection.query(sql, function(error, rows, fields){
+
+    });
+
+    res.sendStatus(200);
+};
+
