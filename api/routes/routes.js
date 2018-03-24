@@ -14,6 +14,13 @@ module.exports = function(app) {
     app.route('/patients/login')
       .post(controller.login)
 
+    app.route('/contacts')
+      .get(controller.get_emergency_contacts)
+    
+    app.route('/contacts/:patientID')
+      .post(controller.add_emergency_contact)
+      .delete(controller.delete_emergency_contact)
+
     //temporary API, for testing
     app.route('/logindetails')
       .get(controller.get_login_details)

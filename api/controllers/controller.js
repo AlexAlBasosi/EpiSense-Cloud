@@ -10,7 +10,7 @@ mySQLConnection.connect(function(error){
         }
 });
 
-//queries patientinfo table
+//the following methods query the patientinfo table
 exports.get_all_records = function(req, res){
 
     console.log("Querying from the database...");
@@ -36,38 +36,6 @@ exports.get_all_records = function(req, res){
                     "contact_number": rows[i].contact_number,
                     "address": rows[i].address,
                     "emergency_contact_id": rows[i].emergency_contact_id
-                }
-            }
-
-            var jsonObj = {
-                "Patients": recordJson
-            }
-
-            res.json(jsonObj);
-        }
-    });
-};
-
-//queries logindetails table
-exports.get_login_details = function(req, res){
-
-    console.log("Querying from the database...");
-    var sql = "SELECT * FROM logindetails";
-    mySQLConnection.query(sql, function(error, rows, fields){
-        if(error) {
-            console.log("Query failed.");
-        } else {
-            console.log("Query successful.");
-
-            console.log(rows);
-
-            var recordJson = [rows.length];
-
-            for(var i = 0; i < rows.length; i++){
-                recordJson[i] = {
-                    "patient_id": rows[i].patient_id,
-                    "email": rows[i].email,
-                    "patient_password": rows[i].patient_password
                 }
             }
 
@@ -123,6 +91,7 @@ exports.sign_up = function(req, res){
         }
     }); 
 };
+
 
 exports.get_specific_record = function(req, res){
     console.log("Querying from database...");
@@ -265,9 +234,116 @@ exports.delete_specific_record = function(req, res){
 
     var sql = "DELETE FROM patientinfo WHERE patient_id=" + patientID;
     mySQLConnection.query(sql, function(error, rows, fields){
-
+        if(error){
+            console.log("Query failed.");
+            console.log(error);
+            res.sendStatus(500);
+        } else {
+            console.log("Patient record deleted.");
+            res.sendStatus(200);
+        }
     });
-
-    res.sendStatus(200);
 };
 
+
+//the following methods query the logindetails table
+exports.get_login_details = function(req, res){
+
+    console.log("Querying from the database...");
+    var sql = "SELECT * FROM logindetails";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            console.log(rows);
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "email": rows[i].email,
+                    "patient_password": rows[i].patient_password
+                }
+            }
+
+            var jsonObj = {
+                "Patients": recordJson
+            }
+
+            res.json(jsonObj);
+        }
+    });
+};
+
+//the following methods query the emergencycontacts table
+exports.get_emergency_contacts = function(req, res){
+
+    console.log("Querying from the database...");
+    var sql = "SELECT * FROM emergencycontacts";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            console.log(rows);
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "contact_number": rows[i].contact_number
+                }
+            }
+
+            var jsonObj = {
+                "Patients": recordJson
+            }
+
+            res.json(jsonObj);
+        }
+    });
+};
+
+exports.add_emergency_contact = function(req, res){
+    console.log("Adding emergency contact.");
+    var id = req.params.patientID;
+    var contact_number = req.query.contact_number;
+
+    var sql = "INSERT INTO emergencycontacts (patient_id, contact_number) VALUES('\
+    " + id + "', '" + contact_number + "')";
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error){
+            console.log("Query failed.");
+            console.log(error);
+            res.sendStatus(500);
+        } else {
+            console.log("Emergency contact added.");
+            res.sendStatus(200);
+        }
+    });
+};
+
+exports.delete_emergency_contact = function(req, res){
+
+    var id = req.params.patientID;
+
+    console.log(id);
+
+    var sql = "DELETE FROM emergencycontacts WHERE patient_id=" + id;
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error){
+            console.log("Query failed.");
+            console.log(error);
+            res.sendStatus(500);
+        } else {
+            console.log("Emergency contact deleted.");
+            res.sendStatus(200);
+        }
+    });
+};
