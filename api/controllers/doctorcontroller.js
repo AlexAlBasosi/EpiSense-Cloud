@@ -83,7 +83,8 @@ exports.get_specific_record = function(req, res){
                             "contact_number": rows[0].contact_number,
                             "address": rows[0].address,
                             "specialization": rows[0].specialization,
-                            "consultation_hours": rows[0].consultation_hours
+                            "consultation_hours": rows[0].consultation_hours,
+                            "email": innerrows[0].email
                         }
 
                         var jsonObj = {
