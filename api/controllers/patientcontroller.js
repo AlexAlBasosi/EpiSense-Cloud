@@ -35,7 +35,8 @@ exports.get_all_records = function(req, res){
                     "date_of_birth": rows[i].date_of_birth,
                     "contact_number": rows[i].contact_number,
                     "address": rows[i].address,
-                    "emergency_contact_id": rows[i].emergency_contact_id
+                    "emergency_contact_id": rows[i].emergency_contact_id,
+                    "doctor_id": rows[i].doctor_id
                 }
             }
 
@@ -131,7 +132,8 @@ exports.get_specific_record = function(req, res){
                             "contact_number": rows[0].contact_number,
                             "address": rows[0].address,
                             "email": innerrows[0].email,
-                            "emergency_contact_id": rows[0].emergency_contact_id
+                            "emergency_contact_id": rows[0].emergency_contact_id,
+                            "doctor_id": rows[0].doctor_id
                         }
 
                         var jsonObj = {
@@ -169,7 +171,7 @@ exports.update_profile = function(req, res){
          date_of_birth = " + date_of_birth + ",\
          contact_number = '" + contact_number + "',\
          address = '" + address + "',\
-         emergency_contact_id = " + emergency_contact_id + "\
+         doctor_id = " + doctor_id + "\
      WHERE patient_id = " + id;
 
      mySQLConnection.query(sql, function(error, rows, fields){
