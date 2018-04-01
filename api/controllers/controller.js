@@ -10,6 +10,8 @@ mySQLConnection.connect(function(error){
         }
 });
 
+//Patients
+
 //the following methods query the patientinfo table
 exports.get_all_records = function(req, res){
 
@@ -99,40 +101,52 @@ exports.get_specific_record = function(req, res){
 
     var sql = "SELECT * FROM patientinfo WHERE patientinfo.patient_id = " + id;
     mySQLConnection.query(sql, function(error, rows, fields){
+        var loginsql = "SELECT email FROM logindetails WHERE logindetails.patient_id = " + id;
+
         if(error){
             console.log("Query failed.");
             console.log(error);
         } else {
+            
+            mySQLConnection.query(loginsql, function(innererror, innerrows, innerfields){
 
-            var sql = "SELECT * FROM patientinfo";
-
-                console.log("Query successful.");
-
-                if(rows.length > 0){
-
-                    var recordJson = [1];
-
-                    recordJson[0] = {
-                        "patient_id": rows[0].patient_id,
-                        "first_name": rows[0].first_name,
-                        "last_name": rows[0].last_name,
-                        "gender": rows[0].gender,
-                        "age": rows[0].age,
-                        "date_of_birth": rows[0].date_of_birth,
-                        "contact_number": rows[0].contact_number,
-                        "address": rows[0].address,
-                        "emergency_contact_id": rows[0].emergency_contact_id
-                    }
-
-                    var jsonObj = {
-                        "Patients": recordJson
-                    }
-
-                    res.json(jsonObj);
-
+                if(innererror){
+                    console.log("Query failed.");
+                    console.log(innererror);
                 } else {
-                    res.sendStatus(404);
+
+                    var sql = "SELECT * FROM patientinfo";
+
+                    console.log("Query successful.");
+
+                    if(rows.length > 0){
+
+                        var recordJson = [1];
+
+                        recordJson[0] = {
+                            "patient_id": rows[0].patient_id,
+                            "first_name": rows[0].first_name,
+                            "last_name": rows[0].last_name,
+                            "gender": rows[0].gender,
+                            "age": rows[0].age,
+                            "date_of_birth": rows[0].date_of_birth,
+                            "contact_number": rows[0].contact_number,
+                            "address": rows[0].address,
+                            "email": innerrows[0].email,
+                            "emergency_contact_id": rows[0].emergency_contact_id
+                        }
+
+                        var jsonObj = {
+                            "Patients": recordJson
+                        }
+
+                        res.json(jsonObj);
+
+                    } else {
+                        res.sendStatus(404);
+                    }
                 }
+            });
         }
     });
 };
