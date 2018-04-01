@@ -1,7 +1,6 @@
 module.exports = function(app) {
 
   //patients
-
     var patientcontroller = require('../controllers/patientcontroller');
 
     app.route('/patients')
@@ -29,10 +28,12 @@ module.exports = function(app) {
 
     
     //doctors
-
     var doctorcontroller = require('../controllers/doctorcontroller');
 
     app.route('/doctors')
       .get(doctorcontroller.get_all_records)
+
+    app.route('/doctors/:doctorID')
+      .get(doctorcontroller.get_specific_record)
 
 };

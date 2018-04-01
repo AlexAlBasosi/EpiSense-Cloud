@@ -47,3 +47,56 @@ exports.get_all_records = function(req, res){
     });
 
 };
+
+exports.get_specific_record = function(req, res){
+    console.log("Querying from database...");
+    var id = req.params.doctorID;
+
+    var sql = "SELECT * FROM doctorinfo WHERE doctorinfo.doctor_id = " + id;
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        var loginsql = "SELECT email FROM doctor_logindetails WHERE doctor_logindetails.doctor_id = " + id;
+
+       if(error){
+            console.log("Query failed.");
+            console.log(error);
+        } else {
+            mySQLConnection.query(loginsql, function(innererror, innerrows, innerfields){
+
+                if(innererror){
+                    console.log("Query failed.");
+                    console.log(innererror);
+                } else {
+
+                    var sql = "SELECT * FROM doctorinfo";
+
+                    console.log("Query successful.");
+
+                    if(rows.length > 0){
+
+                        var recordJson = [1];
+
+                        recordJson[0] = {
+                            "doctor_id": rows[0].doctor_id,
+                            "first_name": rows[0].first_name,
+                            "last_name": rows[0].last_name,
+                            "contact_number": rows[0].contact_number,
+                            "address": rows[0].address,
+                            "specialization": rows[0].specialization,
+                            "consultation_hours": rows[0].consultation_hours
+                        }
+
+                        var jsonObj = {
+                            "Doctors": recordJson
+                        }
+
+                        res.json(jsonObj);
+
+                    } else {
+                        res.sendStatus(404);
+                    }
+                }
+            });
+        }
+    });
+};
