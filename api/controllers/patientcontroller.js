@@ -109,47 +109,58 @@ exports.get_specific_record = function(req, res){
             
             mySQLConnection.query(loginsql, function(innererror, innerrows, innerfields){
 
-                if(innererror){
-                    console.log("Query failed.");
-                    console.log(innererror);
-                } else {
+                var doctorsql = "SELECT first_name FROM doctorinfo WHERE doctor_id=" + rows[0].doctor_id;
 
-                    var sql = "SELECT * FROM patientinfo";
-
-                    console.log("Query successful.");
-
-                    if(rows.length > 0){
-
-                        var recordJson = [1];
-
-                        recordJson[0] = {
-                            "patient_id": rows[0].patient_id,
-                            "first_name": rows[0].first_name,
-                            "last_name": rows[0].last_name,
-                            "gender": rows[0].gender,
-                            "age": rows[0].age,
-                            "date_of_birth": rows[0].date_of_birth,
-                            "contact_number": rows[0].contact_number,
-                            "address": rows[0].address,
-                            "email": innerrows[0].email,
-                            "emergency_contact_id": rows[0].emergency_contact_id,
-                            "doctor_id": rows[0].doctor_id
-                        }
-
-                        var jsonObj = {
-                            "Patients": recordJson
-                        }
-
-                        res.json(jsonObj);
-
+                mySQLConnection.query(doctorsql, function(doctorerror, doctorrows, doctorfields){
+                    if(doctorerror){
+                        console.log("Query failed.");
+                        console.log(doctorerror);
                     } else {
-                        res.sendStatus(404);
+
+                        if(innererror){
+                            console.log("Query failed.");
+                            console.log(innererror);
+                        } else {
+                            var sql = "SELECT * FROM patientinfo";
+        
+                            console.log("Query successful.");
+        
+                            if(rows.length > 0){
+        
+                                var recordJson = [1];
+        
+                                recordJson[0] = {
+                                    "patient_id": rows[0].patient_id,
+                                    "first_name": rows[0].first_name,
+                                    "last_name": rows[0].last_name,
+                                    "gender": rows[0].gender,
+                                    "age": rows[0].age,
+                                    "date_of_birth": rows[0].date_of_birth,
+                                    "contact_number": rows[0].contact_number,
+                                    "address": rows[0].address,
+                                    "email": innerrows[0].email,
+                                    "emergency_contact_id": rows[0].emergency_contact_id,
+                                    "doctor_id": rows[0].doctor_id,
+                                    "doctor_name": doctorrows[0].first_name
+                                }
+        
+                                var jsonObj = {
+                                    "Patients": recordJson
+                                }
+        
+                                res.json(jsonObj);
+        
+                            } else {
+                                res.sendStatus(404);
+                            }
+                        }
                     }
-                }
+                });
             });
         }
     });
 };
+
 
 exports.update_profile = function(req, res){
     console.log("Updating record...");
