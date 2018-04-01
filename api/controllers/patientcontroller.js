@@ -10,8 +10,6 @@ mySQLConnection.connect(function(error){
         }
 });
 
-//Patients
-
 //the following methods query the patientinfo table
 exports.get_all_records = function(req, res){
 
@@ -77,16 +75,16 @@ exports.sign_up = function(req, res){
         } else {
             console.log("1 record inserted into patientinfo table.");
             
-            var insertIntoLoginDetailsTable = "INSERT INTO logindetails (patient_id, email, patient_password) VALUES('\
+            var insertIntoLoginDetailsTable = "INSERT INTO patient_logindetails (patient_id, email, patient_password) VALUES('\
             " + patientId + "', '" + email + "', '" + password + "')";
 
             mySQLConnection.query(insertIntoLoginDetailsTable, function(error, rows, fields){
                 if(error){
-                    console.log("Error posting to logindetails table.");
+                    console.log("Error posting to patient_logindetails table.");
                     console.log(error);
                     res.sendStatus(500);
                 } else {
-                    console.log("1 record inserted into logindetails table.");
+                    console.log("1 record inserted into patient_logindetails table.");
                     res.sendStatus(200);
                 }
             });
@@ -101,7 +99,7 @@ exports.get_specific_record = function(req, res){
 
     var sql = "SELECT * FROM patientinfo WHERE patientinfo.patient_id = " + id;
     mySQLConnection.query(sql, function(error, rows, fields){
-        var loginsql = "SELECT email FROM logindetails WHERE logindetails.patient_id = " + id;
+        var loginsql = "SELECT email FROM patient_logindetails WHERE patient_logindetails.patient_id = " + id;
 
         if(error){
             console.log("Query failed.");
@@ -195,7 +193,7 @@ exports.login = function(req, res){
     sha256.update(req.query.patient_password, "utf8");
     var password = sha256.digest("base64");
 
-    var sql = "SELECT * FROM logindetails";
+    var sql = "SELECT * FROM patient_logindetails";
     mySQLConnection.query(sql, function(error, rows, fields){
 
         var recordJson = [rows.length];
@@ -260,11 +258,11 @@ exports.delete_specific_record = function(req, res){
 };
 
 
-//the following methods query the logindetails table
+//the following methods query the patient_logindetails table
 exports.get_login_details = function(req, res){
 
     console.log("Querying from the database...");
-    var sql = "SELECT * FROM logindetails";
+    var sql = "SELECT * FROM patient_logindetails";
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error) {
             console.log("Query failed.");
