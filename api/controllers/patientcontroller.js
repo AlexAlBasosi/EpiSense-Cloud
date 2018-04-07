@@ -4,10 +4,10 @@ var crypto = require('crypto');
 
 mySQLConnection.connect(function(error){    
     if(error){
-        console.log('Error making connection to database.')
-        } else {
-            console.log('Connection to database made.');
-        }
+        console.log('Error making connection to database.');
+    } else {
+        console.log('Connection to database made.');
+    }
 });
 
 //the following methods query the patientinfo table
@@ -371,4 +371,53 @@ exports.delete_emergency_contact = function(req, res){
             res.sendStatus(200);
         }
     });
+};
+
+exports.get_seizure_history = function(req, res){
+
+    console.log("Querying from the database...");
+    var sql = "SELECT * FROM seizure_history";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            console.log(rows);
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "time": rows[i].time,
+                    "date": rows[i].date,
+                    "day": rows[i].day
+                }
+            }
+
+            var jsonObj = {
+                "Seizures": {
+                    "Seizures": recordJson
+                }
+            }
+
+            res.json(jsonObj);
+        }
+    });
+};
+
+exports.add_seizure = function(req, res){
+    var id = req.params.patientID;
+    var time = req.query.time;
+    var date = req.query.date;
+    var day = req.query.day;
+
+    console.log("Adding to the database...");
+    var insertIntoSeizureHistoryTable = "INSERT INTO seizure_history (patient_id, time, date, day) VALUES ('\
+    " + id + "', '" + time + "', '" + date + "', '" + day +  "')";
+
+    console.log(insertIntoSeizureHistoryTable);
+
+    res.sendStatus(200);
 };

@@ -5,9 +5,9 @@ var crypto = require('crypto');
 mySQLConnection.connect(function(error){    
     if(error){
         console.log('Error making connection to database.')
-        } else {
-            console.log('Connection to database made.');
-        }
+    } else {
+        console.log('Connection to database made.');
+    }
 });
 
 exports.get_all_records = function(req, res){

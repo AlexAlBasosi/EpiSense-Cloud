@@ -6,5 +6,8 @@ var mysql = require('mysql');
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'EpiSense'
+        database: 'EpiSense',
+        port: '3307'
     });
+
+

@@ -12,6 +12,10 @@ module.exports = function(app) {
       .put(patientcontroller.update_profile)
       .delete(patientcontroller.delete_specific_record)
 
+    app.route('/patients/:patientID/history')
+      .get(patientcontroller.get_seizure_history)
+      .post(patientcontroller.add_seizure)
+
     app.route('/patients/login')
       .post(patientcontroller.login)
 
