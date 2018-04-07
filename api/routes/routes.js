@@ -40,4 +40,6 @@ module.exports = function(app) {
     app.route('/doctors/:doctorID')
       .get(doctorcontroller.get_specific_record)
 
+    j
+
 };
