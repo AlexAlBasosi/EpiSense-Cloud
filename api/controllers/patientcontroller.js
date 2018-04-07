@@ -106,7 +106,7 @@ exports.get_specific_record = function(req, res){
             console.log("Query failed.");
             console.log(error);
         } else {
-            
+
             mySQLConnection.query(loginsql, function(innererror, innerrows, innerfields){
 
                 var doctorsql = "SELECT first_name FROM doctorinfo WHERE doctor_id=" + rows[0].doctor_id;
