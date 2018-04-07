@@ -40,6 +40,10 @@ module.exports = function(app) {
     app.route('/doctors/:doctorID')
       .get(doctorcontroller.get_specific_record)
 
-    j
+    //frontend
+
+    var express = require('express');
+
+    app.use('/episense', express.static('views'));
 
 };
