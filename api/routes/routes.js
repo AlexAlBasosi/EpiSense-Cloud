@@ -44,6 +44,7 @@ module.exports = function(app) {
 
     var express = require('express');
 
+    //serves the login page
     app.use('/episense', express.static('views'));
 
 };

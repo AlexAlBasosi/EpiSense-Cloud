@@ -121,6 +121,8 @@ exports.get_specific_record = function(req, res){
                             console.log("Query failed.");
                             console.log(innererror);
                         } else {
+
+                            console.log(innerrows);
                             var sql = "SELECT * FROM patientinfo";
         
                             console.log("Query successful.");
@@ -375,8 +377,10 @@ exports.delete_emergency_contact = function(req, res){
 
 exports.get_seizure_history = function(req, res){
 
+    var id = req.params.patientID;
+
     console.log("Querying from the database...");
-    var sql = "SELECT * FROM seizure_history";
+    var sql = "SELECT * FROM seizure_history WHERE patient_id=" + id;
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error) {
             console.log("Query failed.");
@@ -397,9 +401,7 @@ exports.get_seizure_history = function(req, res){
             }
 
             var jsonObj = {
-                "Seizures": {
                     "Seizures": recordJson
-                }
             }
 
             res.json(jsonObj);
