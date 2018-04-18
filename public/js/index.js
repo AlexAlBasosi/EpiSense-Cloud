@@ -55,8 +55,6 @@ signUpForm.addEventListener('submit', function(event){
 
   var signUpUrl = "/doctors?doctor_Id=5&email=" + email + "&first_name=" + fname + "&last_name=" + lname + "&specialization=" + speciality + "&doctor_password=" + password;
 
-  console.log(signUpUrl);
-
   $.ajax({
     type: "POST",
     url: signUpUrl,
@@ -77,23 +75,21 @@ const loginForm = document.forms['login-form'];
 
 loginForm.addEventListener('submit', function(event){
     event.preventDefault();
-    const user = loginForm.querySelector('input[id=user]').value;
-    const pass = loginForm.querySelector('input[type=password]').value;
+    const loginEmail = loginForm.querySelector('input[id=loginemail]').value;
+    const loginPass = loginForm.querySelector('input[id=pass]').value;
 
-    urlString = "/patients?patient_id=" + user + "&patient_password=" + pass;
-
-    console.log(urlString);
+    loginUrl = "/doctors/login?email=" + loginEmail + "&doctor_password=" + loginPass;
 
     $.ajax({
       type: "POST",
-      url: "/patients?patient_id=9&patient_password=pass&first_name=alex",
+      url: loginUrl,
       dataType: "text",
       success: function (msg) {
         if (msg) {
-          alert("Somebody" + name + " was added in list !");
+          alert("Login successful!");
           location.reload(true);
         } else {
-          alert("Cannot add to list !");
+          alert("Login failed.");
           }
         },
     });
