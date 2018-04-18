@@ -101,3 +101,96 @@ exports.get_specific_record = function(req, res){
         }
     });
 };
+
+exports.sign_up = function(req, res){
+
+    var doctorId = req.query.doctor_Id;
+    var email = req.query.email;
+    var firstName = req.query.first_name;
+    var lastName = req.query.last_name;
+    var speciality = req.query.specialization;
+
+    //hashes the password and stores it as a hash
+    var sha256 = crypto.createHash("sha256");
+    sha256.update(req.query.doctor_password, "utf8");
+    var password = sha256.digest("base64");
+
+
+    console.log("Adding to the database...");
+    var insertIntoDoctorInfoTable = "INSERT INTO doctorinfo (doctor_id, first_name, last_name, specialization) VALUES ('\
+    " + doctorId + "', '" + firstName + "', '" + lastName + "', '" + speciality + "')";
+
+    var successFlag = false;
+
+    mySQLConnection.query(insertIntoDoctorInfoTable, function(error, rows, fields){
+        if(error){
+            console.log("Error posting to doctorinfo table.");
+            console.log(error);
+            res.sendStatus(500);
+        } else {
+            console.log("1 record inserted into doctorinfo table.");
+            
+            var insertIntoLoginDetailsTable = "INSERT INTO doctor_logindetails (doctor_id, email, doctor_password) VALUES('\
+            " + doctorId + "', '" + email + "', '" + password + "')";
+
+            mySQLConnection.query(insertIntoLoginDetailsTable, function(error, rows, fields){
+                if(error){
+                    console.log("Error posting to doctor_logindetails table.");
+                    console.log(error);
+                    res.sendStatus(500);
+                } else {
+                    console.log("1 record inserted into doctor_logindetails table.");
+                    res.sendStatus(200);
+                }
+            });
+        }
+    }); 
+};
+
+exports.login = function(req, res){
+
+    var email = req.query.email;
+
+    //hashes the password and stores it as a hash
+    var sha256 = crypto.createHash("sha256");
+    sha256.update(req.query.doctor_password, "utf8");
+    var password = sha256.digest("base64");
+
+    var sql = "SELECT * FROM doctor_logindetails";
+    mySQLConnection.query(sql, function(error, rows, fields){
+
+        var recordJson = [rows.length];
+
+        for(var i = 0; i < rows.length; i++){
+            recordJson[i] = {
+                "doctor_id": rows[i].doctor_id,
+                "email": rows[i].email,
+                "doctor_password": rows[i].doctor_password   
+            }
+        }
+
+        var emailExists = false;
+        var passwordMatch = false;
+
+        var pid;
+
+        for(var i = 0; i < rows.length; i++){
+            if(recordJson[i].email == email){
+                emailExists = true;
+
+                if (recordJson[i].doctor_password == password){
+                    passwordMatch = true;
+                    pid = recordJson[i].patient_id;
+                }
+            } 
+        }
+
+        pid = pid + "";
+
+        if(emailExists && passwordMatch){
+            res.sendStatus(200); //user authenticated
+        } else {
+            res.sendStatus(403); //password incorrect
+        } 
+    });
+};

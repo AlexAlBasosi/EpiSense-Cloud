@@ -36,15 +36,20 @@ module.exports = function(app) {
 
     app.route('/doctors')
       .get(doctorcontroller.get_all_records)
+      .post(doctorcontroller.sign_up)
 
     app.route('/doctors/:doctorID')
       .get(doctorcontroller.get_specific_record)
 
-    //frontend
+    app.route('/doctors/login')
+      .post(doctorcontroller.login)
 
-    var express = require('express');
+    //frontend
+    //var logincontroller = require('../controllers/logincontroller');
+ 
 
     //serves the login page
-    app.use('/episense', express.static('views'));
+    var express = require('express');
+    app.use('/episense', express.static('public'))
 
 };
