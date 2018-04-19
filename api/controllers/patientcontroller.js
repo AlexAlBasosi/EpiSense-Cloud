@@ -415,10 +415,10 @@ exports.add_emergency_contact = function(req, res){
 exports.delete_emergency_contact = function(req, res){
 
     var id = req.params.patientID;
+    var number = req.query.contact_number;
 
-    console.log(id);
+    var sql = "DELETE FROM emergencycontacts WHERE patient_id=" + id + " AND contact_number='" + number + "'";
 
-    var sql = "DELETE FROM emergencycontacts WHERE patient_id=" + id;
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error){
             console.log("Query failed.");
