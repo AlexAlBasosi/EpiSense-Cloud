@@ -237,12 +237,6 @@ exports.login = function(req, res){
                 "patient_password": rows[i].patient_password   
             }
         }
-    
-        for(var i = 0; i < rows.length; i++){
-            console.log("\n\nPatient ID: " + rows[i].patient_id);
-            console.log("Email: " + rows[i].email);
-            console.log("Patient Password: " + rows[i].patient_password);
-        }
 
         var emailExists = false;
         var passwordMatch = false;
