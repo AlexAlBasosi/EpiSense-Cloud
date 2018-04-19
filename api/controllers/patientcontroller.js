@@ -55,42 +55,59 @@ exports.sign_up = function(req, res){
     var email = req.query.email;
     var firstName = req.query.first_name;
     var lastName = req.query.last_name;
+    var doctorEmail = req.query.doctor_email;
 
     //hashes the password and stores it as a hash
     var sha256 = crypto.createHash("sha256");
     sha256.update(req.query.patient_password, "utf8");
     var password = sha256.digest("base64");
 
-
-    console.log("Adding to the database...");
-    var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name) VALUES ('\
-    " + patientId + "', '" + firstName + "', '" + lastName + "')";
+    var doctorLoginSQL = "SELECT * FROM doctor_logindetails";
 
     var successFlag = false;
 
-    mySQLConnection.query(insertIntoPatientInfoTable, function(error, rows, fields){
-        if(error){
-            console.log("Error posting to patientinfo table.");
-            console.log(error);
-            res.sendStatus(500);
-        } else {
-            console.log("1 record inserted into patientinfo table.");
-            
-            var insertIntoLoginDetailsTable = "INSERT INTO patient_logindetails (patient_id, email, patient_password) VALUES('\
-            " + patientId + "', '" + email + "', '" + password + "')";
+    mySQLConnection.query(doctorLoginSQL, function(error, rows, fields){
+        for(var i = 0; i < rows.length; i++){
+            if(rows[i].email == doctorEmail){
+                successFlag = true;
+            } 
+        }
 
-            mySQLConnection.query(insertIntoLoginDetailsTable, function(error, rows, fields){
+        if(successFlag == true){
+            console.log("Adding to the database...");
+            var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name) VALUES ('\
+            " + patientId + "', '" + firstName + "', '" + lastName + "')";
+
+            successFlag = true;
+
+            mySQLConnection.query(insertIntoPatientInfoTable, function(error, rows, fields){
                 if(error){
-                    console.log("Error posting to patient_logindetails table.");
+                    console.log("Error posting to patientinfo table.");
                     console.log(error);
                     res.sendStatus(500);
                 } else {
-                    console.log("1 record inserted into patient_logindetails table.");
-                    res.sendStatus(200);
+                    console.log("1 record inserted into patientinfo table.");
+                    
+                    var insertIntoLoginDetailsTable = "INSERT INTO patient_logindetails (patient_id, email, patient_password) VALUES('\
+                    " + patientId + "', '" + email + "', '" + password + "')";
+
+                    mySQLConnection.query(insertIntoLoginDetailsTable, function(error, rows, fields){
+                        if(error){
+                            console.log("Error posting to patient_logindetails table.");
+                            console.log(error);
+                            res.sendStatus(500);
+                        } else {
+                            console.log("1 record inserted into patient_logindetails table.");
+                            res.sendStatus(200);
+                        }
+                    });
                 }
-            });
+            }); 
+        } else {
+            res.sendStatus(403);
         }
-    }); 
+    });
+
 };
 
 
@@ -323,12 +340,48 @@ exports.get_emergency_contacts = function(req, res){
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "patient_id": rows[i].patient_id,
-                    "contact_number": rows[i].contact_number
+                    "contact_number": rows[i].contact_number,
+                    "first_name": rows[i].first_name,
+                    "last_name": rows[i].last_name
                 }
             }
 
             var jsonObj = {
-                "Patients": recordJson
+                "Contacts": recordJson
+            }
+
+            res.json(jsonObj);
+        }
+    });
+};
+
+exports.get_specific_contact = function(req, res){
+    var id = req.params.patientID;
+
+    console.log("Querying from the database...");
+
+    var sql = "SELECT * FROM emergencycontacts WHERE patient_id=" + id;
+    console.log(sql);
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "contact_number": rows[i].contact_number,
+                    "first_name": rows[i].first_name,
+                    "last_name": rows[i].last_name
+                }
+            }
+
+            var jsonObj = {
+                "Contacts": recordJson
             }
 
             res.json(jsonObj);
@@ -338,11 +391,14 @@ exports.get_emergency_contacts = function(req, res){
 
 exports.add_emergency_contact = function(req, res){
     console.log("Adding emergency contact.");
-    var id = req.params.patientID;
+    var id = req.query.patient_id;
     var contact_number = req.query.contact_number;
+    var first_name = req.query.first_name;
+    var last_name = req.query.last_name;
 
-    var sql = "INSERT INTO emergencycontacts (patient_id, contact_number) VALUES('\
-    " + id + "', '" + contact_number + "')";
+    var sql = "INSERT INTO emergencycontacts (patient_id, contact_number, first_name, last_name) VALUES('" + id + "', '" + contact_number + "', '" + first_name + "', '" + last_name + "')";
+
+    console.log(sql);
 
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error){

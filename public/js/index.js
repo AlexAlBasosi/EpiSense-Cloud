@@ -49,11 +49,12 @@ signUpForm.addEventListener('submit', function(event){
   event.preventDefault();
   const fname = signUpForm.querySelector('input[id=firstName]').value;
   const lname = signUpForm.querySelector('input[id=lastName]').value;
+  const doctorID = signUpForm.querySelector('input[id=doctorID').value;
   const email = signUpForm.querySelector('input[id=email]').value;
   const password = signUpForm.querySelector('input[id=password]').value;
   const speciality = signUpForm.querySelector('input[id=speciality]').value;
 
-  var signUpUrl = "/doctors?doctor_Id=5&email=" + email + "&first_name=" + fname + "&last_name=" + lname + "&specialization=" + speciality + "&doctor_password=" + password;
+  var signUpUrl = "/doctors?doctor_Id=" + doctorID + "&email=" + email + "&first_name=" + fname + "&last_name=" + lname + "&specialization=" + speciality + "&doctor_password=" + password;
 
   $.ajax({
     type: "POST",
