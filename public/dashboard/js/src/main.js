@@ -353,3 +353,5 @@ const MainView = (($) => {
 
   return MainView
 })($)
+
+console.log(localStorage.getItem("potato"));

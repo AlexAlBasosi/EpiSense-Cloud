@@ -79,6 +79,8 @@ loginForm.addEventListener('submit', function(event){
     const loginEmail = loginForm.querySelector('input[id=loginemail]').value;
     const loginPass = loginForm.querySelector('input[id=pass]').value;
 
+    sessionStorage.setItem("loginEmail", loginEmail);
+
     loginUrl = "/doctors/login?email=" + loginEmail + "&doctor_password=" + loginPass;
 
     $.ajax({
@@ -94,3 +96,5 @@ loginForm.addEventListener('submit', function(event){
       }
     });
 });
+
+
