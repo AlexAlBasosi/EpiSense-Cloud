@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 09, 2018 at 06:55 PM
+-- Generation Time: Apr 21, 2018 at 06:03 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 5.6.33
 
@@ -43,7 +43,13 @@ CREATE TABLE `doctorinfo` (
 --
 
 INSERT INTO `doctorinfo` (`doctor_id`, `first_name`, `last_name`, `contact_number`, `address`, `specialization`, `consultation_hours`) VALUES
-(1, 'Jones', 'McMillan', '+971535930583', 'Somewhere', 'Something', '12PM - 3PM');
+(0, 'Shaza', 'Kazia', '', '', 'stuff', ''),
+(1, 'Jones', 'McMillan', '+971535930583', 'Somewhere', 'Something', '12PM - 3PM'),
+(2, 'Alexander', 'Al Basosi', '', '', 'surgery', ''),
+(4, 'Alexander', 'Al Basosi', '', '', 'surgery', ''),
+(5, 'George', 'McMillan', '', '', 'more', ''),
+(6, 'Shaza', 'Kazia', '', '', 'being a potato', ''),
+(7, 'Rabia', 'Rauf', '', '', 'art', '');
 
 -- --------------------------------------------------------
 
@@ -62,7 +68,13 @@ CREATE TABLE `doctor_logindetails` (
 --
 
 INSERT INTO `doctor_logindetails` (`doctor_id`, `email`, `doctor_password`) VALUES
-(1, 'jones@mcmillan.com', 'password');
+(1, 'jones@mcmillan.com', 'password'),
+(2, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(0, 'shaza@kazia.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(4, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(5, 'george@mill.com', '10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE='),
+(6, 'shaza@khalifa.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(7, 'rabia@rauf.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=');
 
 -- --------------------------------------------------------
 
@@ -76,6 +88,16 @@ CREATE TABLE `emergencycontacts` (
   `first_name` text NOT NULL,
   `last_name` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `emergencycontacts`
+--
+
+INSERT INTO `emergencycontacts` (`patient_id`, `contact_number`, `first_name`, `last_name`) VALUES
+(2, '05034342341', 'Rabia', 'Rauf'),
+(2, '0505830385', 'John', 'Smith'),
+(2, '0503958273', 'Simyan', 'Anwar'),
+(2, '0502950384', 'Samia', 'Ahmad');
 
 -- --------------------------------------------------------
 
@@ -92,7 +114,6 @@ CREATE TABLE `patientinfo` (
   `date_of_birth` text NOT NULL,
   `contact_number` text NOT NULL,
   `address` text NOT NULL,
-  `emergency_contact_id` int(11) NOT NULL,
   `doctor_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -100,10 +121,19 @@ CREATE TABLE `patientinfo` (
 -- Dumping data for table `patientinfo`
 --
 
-INSERT INTO `patientinfo` (`patient_id`, `first_name`, `last_name`, `gender`, `age`, `date_of_birth`, `contact_number`, `address`, `emergency_contact_id`, `doctor_id`) VALUES
-(1, 'Alexander', 'Al Basosi', 'm', 22, '12/06/1995', '+971503494591', 'Al Barsha 1', 0, 1),
-(2, 'Victoria', 'Ashley', 'f', 0, '06/09/2005', '+97150859381', 'Al Barsha 1', 0, 1),
-(5, 'donna', 'venezuela', '', 0, '', '', '', 0, 1);
+INSERT INTO `patientinfo` (`patient_id`, `first_name`, `last_name`, `gender`, `age`, `date_of_birth`, `contact_number`, `address`, `doctor_id`) VALUES
+(1, 'Alexander', 'Al Basosi', 'm', 22, '12/06/1995', '+971503494591', 'Al Barsha 1', 1),
+(2, 'Victoria', 'Ashley', 'f', 0, '06/09/2005', '+97150859381', 'Al Barsha 1', 1),
+(3, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(4, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(5, 'donna', 'venezuela', '', 0, '', '', '', 1),
+(6, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(8, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(9, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(10, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(11, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(12, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
+(13, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -123,7 +153,16 @@ CREATE TABLE `patient_logindetails` (
 
 INSERT INTO `patient_logindetails` (`patient_id`, `email`, `patient_password`) VALUES
 (5, 'donna@venezuela.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
-(2, 'victoria@ashley.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=');
+(2, 'victoria@ashley.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(3, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(4, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(6, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
+(8, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
+(9, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
+(10, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
+(11, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
+(12, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
+(13, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM=');
 
 -- --------------------------------------------------------
 
