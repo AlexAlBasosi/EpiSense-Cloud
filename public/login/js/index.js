@@ -86,12 +86,11 @@ loginForm.addEventListener('submit', function(event){
       url: loginUrl,
       dataType: "text",
       success: function (msg) {
-        if (msg) {
           alert("Login successful!");
-          location.reload(true);
-        } else {
-          alert("Login failed.");
-          }
-        },
+          window.location.replace('/episense/dashboard');
+      },
+      error: function(msg) {
+        alert("Login failed.");
+      }
     });
 });

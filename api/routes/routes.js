@@ -45,12 +45,10 @@ module.exports = function(app) {
     app.route('/doctors/login')
       .post(doctorcontroller.login)
 
-    //frontend
-    //var logincontroller = require('../controllers/logincontroller');
- 
-
     //serves the login page
     var express = require('express');
-    app.use('/episense', express.static('public'))
+    app.use('/episense', express.static('public/login'))
 
+    //serves the dashboard page
+    app.use('/episense/dashboard', express.static('public/dashboard'))
 };
