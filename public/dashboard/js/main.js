@@ -330,4 +330,8 @@
 // }($);
 // //# sourceMappingURL=main.js.map
 
-console.log(sessionStorage.getItem("loginEmail"));
+if(sessionStorage.getItem("loginEmail") == null) {
+  window.location.replace('/episense');
+} else {
+  console.log(sessionStorage.getItem("loginEmail"));
+}
