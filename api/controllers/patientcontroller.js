@@ -446,7 +446,8 @@ exports.get_seizure_history = function(req, res){
                     "patient_id": rows[i].patient_id,
                     "time": rows[i].time,
                     "date": rows[i].date,
-                    "day": rows[i].day
+                    "day": rows[i].day,
+                    "isSeizure": rows[i].isSeizure
                 }
             }
 

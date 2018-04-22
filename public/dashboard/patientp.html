@@ -20,18 +20,24 @@ Rabia Rauf & Alex al Basosi
     <title>EpiSense by AuraTec</title>
    
    <!-- Icons-->
-    <!-- <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
     <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet"> -->
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
     
 	
 	<!-- Main styles for this application-->
     <link href="css/style.css" rel="stylesheet">
+	<link href="css/patientboxes.css" rel="stylesheet">
     <link href="vendors/css/pace.min.css" rel="stylesheet">
 	
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 	
   </head>
+  
+ 
+  
+  
+  
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
     <header class="app-header navbar">
 			  <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
@@ -200,23 +206,112 @@ Rabia Rauf & Alex al Basosi
                 <i class="icon-graph"></i>  Dashboard</a>-->
 				
 				
-              <a class="btn" href="/episense">
+              <a class="btn" href="#">
                 <i class="fas fa-sign-out-alt"></i>  Log Out</a>
             </div>
           </li>
         </ol>
 		
 
-<h1>Patient's profile</h1>
-<div class="row">
-<h2> This can be like a list of patients and links to their individual data<h2>
+<h1>Patient's Profiles</h1>
+
+ <!-- for the patient's info-->
+
+				<div id="main">
+					<div class="inner">
+
+					<!-- Boxes -->
+						<div class="thumbnails">
+
+							<div class="box">
+								<a class="image fit"><img src="img/p4.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>Patient A</h3>
+									<li align="left"> ID: 007  </li>
+									<li align="left"> Age: 102  </li>
+									<li align="left"> Contact no: 1234564  </li> 
+									
+									<a class="button fit" data-poptrox="trends">View Medical Record</a>
+								</div>
+							</div>
+
+							<div class="box">
+							<a class="image fit"><img src="img/p2.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>Patient B</h3>
+									<li align="left"> ID: 009  </li>
+									<li align="left"> Age: 02  </li>
+									<li align="left"> Contact no: 1234568  </li> 
+									
+									<a class="button fit" data-poptrox="trends">View Medical Record</a>
+							
+								
+								</div>
+							</div>
+
+							<div class="box">
+								<a class="image fit"><img src="img/p7.jpg" alt="" /></a>
+								
+								<div class="inner">
+									<h3>Patient C</h3>
+									<li align="left"> ID: 420  </li>
+									<li align="left"> Age: 84  </li>
+									<li align="left"> Contact no: 1234567  </li> 
+									
+									<a class="button fit" data-poptrox="trends">View Medical Record</a>
+								</div>
+							</div>
+
+							<div class="box">
+								<a class="image fit"><img src="img/p1.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>Patient D</h3>
+									<li align="left"> ID: 002  </li>
+									<li align="left"> Age: 92  </li>
+									<li align="left"> Contact no: 1234563  </li> 
+									
+									<a class="button fit" data-poptrox="trends">View Medical Record</a>
+								</div>
+							</div>
+
+							<div class="box">
+								<a class="image fit"><img src="img/p5.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>Patient E</h3>
+									<li align="left"> ID: 032  </li>
+									<li align="left"> Age: 11  </li>
+									<li align="left"> Contact no: 1234565  </li> 
+									
+									<a class="button fit" data-poptrox="trends">View Medical Record</a>
+								</div>
+							</div>
+
+							<div class="box">
+								<a class="image fit"><img src="img/p3.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>Patient F</h3>
+									<li align="left"> ID: 011  </li>
+									<li align="left"> Age: 53  </li>
+									<li align="left"> Contact no: 1234576  </li> 
+									
+									<a class="button fit" data-poptrox="trends">View Medical Record</a>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+
 </div>
 
 
-<h1>Patient's profile</h1>
-<div class="row">
-<h2> This can be like a list of patients and links to their individual data<h2>
-</div>
+
+
+
+
+
+
 
 </body>
 </html>
@@ -234,15 +329,15 @@ Rabia Rauf & Alex al Basosi
     
     </footer>
     <!-- Bootstrap and necessary plugins-->
-    <!-- <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/pace-progress/pace.min.js"></script>
     <script src="node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
-    <script src="node_modules/@coreui/coreui/dist/js/coreui.min.js"></script> -->
+    <script src="node_modules/@coreui/coreui/dist/js/coreui.min.js"></script>
     <!-- Plugins and scripts required by this view-->
-    <!-- <script src="node_modules/chart.js/dist/Chart.min.js"></script>
-    <script src="node_modules/@coreui/coreui-plugin-chartjs-custom-tooltips/dist/js/custom-tooltips.min.js"></script> -->
+    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="node_modules/@coreui/coreui-plugin-chartjs-custom-tooltips/dist/js/custom-tooltips.min.js"></script>
     <script src="js/main.js"></script>
 	<script src="js/carousel.js"></script>
   </body>
