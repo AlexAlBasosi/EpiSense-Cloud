@@ -194,3 +194,9 @@ exports.login = function(req, res){
         } 
     });
 };
+
+exports.get_doctor_patients = function(req, res){
+    var doctorID = req.params.doctorID;
+    var sql = "SELECT * patientinfo WHERE doctor_id = " + doctorID;
+    console.log(sql);
+}

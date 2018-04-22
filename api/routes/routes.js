@@ -38,6 +38,9 @@ module.exports = function(app) {
     app.route('/doctors')
       .get(doctorcontroller.get_all_records)
       .post(doctorcontroller.sign_up)
+    
+    app.route('/doctors/patients/:doctorID')
+      .get(doctorcontroller.get_doctor_patients)
 
     app.route('/doctors/:doctorID')
       .get(doctorcontroller.get_specific_record)
