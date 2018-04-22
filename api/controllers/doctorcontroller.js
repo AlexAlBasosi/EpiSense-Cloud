@@ -197,6 +197,39 @@ exports.login = function(req, res){
 
 exports.get_doctor_patients = function(req, res){
     var doctorID = req.params.doctorID;
-    var sql = "SELECT * patientinfo WHERE doctor_id = " + doctorID;
-    console.log(sql);
+    var sql = "SELECT * FROM patientinfo WHERE doctor_id = " + doctorID;
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            console.log(rows);
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "first_name": rows[i].first_name,
+                    "last_name": rows[i].last_name,
+                    "gender": rows[i].gender,
+                    "age": rows[i].age,
+                    "date_of_birth": rows[i].date_of_birth,
+                    "contact_number": rows[i].contact_number,
+                    "address": rows[i].address,
+                    "emergency_contact_id": rows[i].emergency_contact_id,
+                    "doctor_id": rows[i].doctor_id
+                }
+            }
+
+            var jsonObj = {
+                "Patients": recordJson
+            }
+
+            res.json(jsonObj);
+        }
+    });
+
 }
