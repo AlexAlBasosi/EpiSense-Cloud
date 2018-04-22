@@ -33,8 +33,6 @@ $.ajax({
 
 var imageIndex = 1;
 
-console.log(arrResponse.Patients[0]);
-
 Array.from(arrResponse.Patients).forEach(function(patient){
     var patientDiv = document.createElement("div");
     patientDiv.className = "box";
