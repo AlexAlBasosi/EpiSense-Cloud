@@ -31,6 +31,31 @@ $.ajax({
   async: false
 });
 
+var imageIndex = 1;
+
 Array.from(arrResponse.Patients).forEach(function(patient){
-    console.log(patient);
+    var patientDiv = document.createElement("div");
+    patientDiv.className = "box";
+    document.querySelector(".thumbnails").appendChild(patientDiv);
+
+    var aTag = document.createElement("a");
+    aTag.className = "image fit";
+    patientDiv.appendChild(aTag);
+
+    var imgTag = document.createElement("img");
+    imgTag.src = "img/p" + imageIndex + ".jpg";
+    imgTag.alt = "";
+    aTag.appendChild(imgTag);
+
+    var innerDiv = document.createElement("div");
+    innerDiv.className = "inner";
+    patientDiv.appendChild(innerDiv);
+
+    var h2Tag = document.createElement("h2");
+    h2Tag.innerHTML = arrResponse.Patients[0].first_name + " " + arrResponse.Patients[0].last_name;
+    innerDiv.appendChild(h2Tag);
+
+    console.log(document.querySelector(".thumbnails"));
+    
+    imageIndex++;
 });
