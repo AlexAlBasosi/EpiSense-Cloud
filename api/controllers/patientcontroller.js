@@ -65,18 +65,20 @@ exports.sign_up = function(req, res){
     var doctorLoginSQL = "SELECT * FROM doctor_logindetails";
 
     var successFlag = false;
+    var doctorID;
 
     mySQLConnection.query(doctorLoginSQL, function(error, rows, fields){
         for(var i = 0; i < rows.length; i++){
             if(rows[i].email == doctorEmail){
                 successFlag = true;
+                doctorID = rows[i].doctor_id;
             } 
         }
 
         if(successFlag == true){
             console.log("Adding to the database...");
-            var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name) VALUES ('\
-            " + patientId + "', '" + firstName + "', '" + lastName + "')";
+            var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name, doctor_id) VALUES ('\
+            " + patientId + "', '" + firstName + "', '" + lastName + "', '" + doctorID + "')";
 
             successFlag = true;
 
