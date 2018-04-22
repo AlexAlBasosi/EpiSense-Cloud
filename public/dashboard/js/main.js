@@ -335,3 +335,4 @@ if(sessionStorage.getItem("loginEmail") == null) {
 } else {
   console.log(sessionStorage.getItem("loginEmail"));
 }
+
