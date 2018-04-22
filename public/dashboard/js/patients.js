@@ -108,9 +108,6 @@ Array.from(arrResponse.Patients).forEach(function(patient){
     innerDiv.appendChild(brk);
 
     innerDiv.appendChild(buttonTag);
-
-
-    console.log(document.querySelector(".thumbnails"));
     
     imageIndex++;
 });
