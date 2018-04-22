@@ -48,6 +48,9 @@ module.exports = function(app) {
     app.route('/doctors/login')
       .post(doctorcontroller.login)
 
+    app.route('/doctors/getID/:doctorEmail')
+      .get(doctorcontroller.get_doctor_id)
+
     //serves the login page
     var express = require('express');
     app.use('/episense', express.static('public/login'))

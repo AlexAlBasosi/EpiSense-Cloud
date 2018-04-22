@@ -330,9 +330,23 @@
 // }($);
 // //# sourceMappingURL=main.js.map
 
+var doctorEmail;
+var doctorID;
+
 if(sessionStorage.getItem("loginEmail") == null) {
   window.location.replace('/episense');
 } else {
-  console.log(sessionStorage.getItem("loginEmail"));
+  doctorEmail = sessionStorage.getItem("loginEmail");
 }
 
+var getIDURL = "/doctors/getID/" + doctorEmail;
+
+$.ajax({
+  url: getIDURL,
+  type: 'GET',
+  success: function(res) {
+    sessionStorage.setItem("loginID", res);
+  }
+});
+
+console.log(sessionStorage.getItem("loginID"));

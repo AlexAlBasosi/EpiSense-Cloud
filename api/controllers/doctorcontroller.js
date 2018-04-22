@@ -205,8 +205,6 @@ exports.get_doctor_patients = function(req, res){
         } else {
             console.log("Query successful.");
 
-            console.log(rows);
-
             var recordJson = [rows.length];
 
             for(var i = 0; i < rows.length; i++){
@@ -231,5 +229,22 @@ exports.get_doctor_patients = function(req, res){
             res.json(jsonObj);
         }
     });
+}
 
+exports.get_doctor_id = function(req, res){
+    var doctorEmail = req.params.doctorEmail;
+    // var sql = "SELECT doctor_id FROM doctorinfo WHERE doctor_logindetails.doctor_id = doctorinfo.doctor_id AND doctor_logindetails.email=" + doctorEmail;
+
+    var sql = "SELECT * FROM doctor_logindetails WHERE email='" + doctorEmail + "'";
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error){
+            console.log("Query failed.");
+            console.log(error);
+        } else {
+            console.log("Query successful.");
+            var doctorID = rows[0].doctor_id;
+            res.send(String(doctorID));
+        }
+    });
 }
