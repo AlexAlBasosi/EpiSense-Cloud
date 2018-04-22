@@ -57,4 +57,7 @@ module.exports = function(app) {
 
     //serves the dashboard page
     app.use('/episense/dashboard', express.static('public/dashboard'))
+
+    //serves the patient charts page
+    app.use('/episense/charts', express.static('public/charts'))
 };

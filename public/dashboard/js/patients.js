@@ -58,12 +58,14 @@ Array.from(arrResponse.Patients).forEach(function(patient){
     var li1 = document.createElement("li");
     li1.align = "left";
     li1.innerHTML = "Patient ID: " + patient.patient_id;
+    li1.id = "patientID";
     innerDiv.appendChild(li1);
     
     if(!patient.age == ""){
         var li2 = document.createElement("li");
         li2.align = "left";
         li2.innerHTML = "Age: " + patient.age;
+        li2.id = "patientAge";
         innerDiv.appendChild(li2);
     }
 
@@ -75,6 +77,7 @@ Array.from(arrResponse.Patients).forEach(function(patient){
         } else {
             li3.innerHTML = "Gender: Male";
         }
+        li3.id = "patientGender";
         innerDiv.appendChild(li3);
     }
 
@@ -82,6 +85,7 @@ Array.from(arrResponse.Patients).forEach(function(patient){
         var li4 = document.createElement("li");
         li4.align = "left";
         li4.innerHTML = "Address: " + patient.address;
+        li4.id = "patientAddress";
         innerDiv.appendChild(li4);
     }
 
@@ -89,6 +93,7 @@ Array.from(arrResponse.Patients).forEach(function(patient){
         var li5 = document.createElement("li");
         li5.align = "left";
         li5.innerHTML = "Contact Number: " + patient.contact_number;
+        li5.id = "patientNum";
         innerDiv.appendChild(li5);
     }
 
@@ -96,12 +101,14 @@ Array.from(arrResponse.Patients).forEach(function(patient){
         var li6 = document.createElement("li");
         li6.align = "left";
         li6.innerHTML = "Date of Birth: " + patient.date_of_birth;
+        li6.id = "patientDOB";
         innerDiv.appendChild(li6);
     }
 
     var buttonTag = document.createElement("a");
     buttonTag.className = "button fit";
     buttonTag.innerHTML = "View Medical Record";
+   // buttonTag.href = "/episense/charts?id=" + patient.patient_id;
     //buttonTag.data-poptrox = "trends";
 
     var brk = document.createElement("br");
@@ -111,3 +118,13 @@ Array.from(arrResponse.Patients).forEach(function(patient){
     
     imageIndex++;
 });
+
+var btn = document.getElementsByClassName('button fit');
+console.log(btn);
+
+Array.from(btns).forEach(function(btn){
+    btn.addEventListener('click', function(event){
+        
+    });
+});
+
