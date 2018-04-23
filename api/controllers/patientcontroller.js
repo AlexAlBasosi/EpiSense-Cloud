@@ -383,8 +383,6 @@ exports.add_emergency_contact = function(req, res){
 
     var sql = "INSERT INTO emergencycontacts (patient_id, contact_number, first_name, last_name) VALUES('" + id + "', '" + contact_number + "', '" + first_name + "', '" + last_name + "')";
 
-    console.log(sql);
-
     mySQLConnection.query(sql, function(error, rows, fields){
         if(error){
             console.log("Query failed.");
@@ -428,16 +426,12 @@ exports.get_seizure_history = function(req, res){
         } else {
             console.log("Query successful.");
 
-            console.log(rows);
-
             var recordJson = [rows.length];
 
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "patient_id": rows[i].patient_id,
-                    "time": rows[i].time,
-                    "date": rows[i].date,
-                    "day": rows[i].day,
+                    "timestamp": rows[i].timestamp,
                     "isSeizure": rows[i].isSeizure
                 }
             }
@@ -453,15 +447,21 @@ exports.get_seizure_history = function(req, res){
 
 exports.add_seizure = function(req, res){
     var id = req.params.patientID;
-    var time = req.query.time;
-    var date = req.query.date;
-    var day = req.query.day;
+    var timestamp = req.query.timestamp;
+    var isSeizure = req.query.isSeizure;
 
     console.log("Adding to the database...");
-    var insertIntoSeizureHistoryTable = "INSERT INTO seizure_history (patient_id, time, date, day) VALUES ('\
-    " + id + "', '" + time + "', '" + date + "', '" + day +  "')";
+    var insertIntoSeizureHistoryTable = "INSERT INTO seizure_history (patient_id, timestamp, isSeizure) VALUES ('\
+    " + id + "', '" + timestamp + "', '" + isSeizure +  "')";
 
-    console.log(insertIntoSeizureHistoryTable);
-
-    res.sendStatus(200);
+    mySQLConnection.query(insertIntoSeizureHistoryTable, function(error, rows, fields){
+        if(error){
+            console.log("Query failed.");
+            console.log(error);
+            res.sendStatus(500);
+        } else {
+            console.log("Emergency contact added.");
+            res.sendStatus(200);
+        }
+    });
 };

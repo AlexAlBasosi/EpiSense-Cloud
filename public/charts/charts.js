@@ -15,7 +15,7 @@ var myChart = new Chart(ctx, {
     data: {
         labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6"],
         datasets: [{
-            label: '# of Seizures',
+            label: 'Number of Seizures',
             data: [12, 19, 3, 5, 2, 3],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
