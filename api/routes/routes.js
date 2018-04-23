@@ -9,7 +9,7 @@ module.exports = function(app) {
 
     app.route('/patients/:patientID')
       .get(patientcontroller.get_specific_record)
-      .post(patientcontroller.update_profile)
+      .put(patientcontroller.update_profile)
       .delete(patientcontroller.delete_specific_record)
 
     app.route('/patients/:patientID/history')
