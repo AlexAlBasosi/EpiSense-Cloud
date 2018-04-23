@@ -186,25 +186,13 @@ exports.get_specific_record = function(req, res){
 exports.update_profile = function(req, res){
     console.log("Updating record...");
     var id = req.params.patientID;
-    var firstName = req.query.first_name;
-    var lastName = req.query.last_name;
-    var gender = req.query.gender;
-    var age = req.query.age;
+    // var gender = req.query.gender;
+    // var age = req.query.age;
     var date_of_birth = req.query.date_of_birth;
     var contact_number = req.query.contact_number;
     var address = req.query.address;
-    var emergency_contact_id = req.query.emergency_contact_id;
 
-    var sql = "UPDATE patientinfo SET \
-         first_name = '" + firstName + "',\
-         last_name = '" + lastName + "',\
-         gender = '" + gender + "',\
-         age = " + age + ",\
-         date_of_birth = " + date_of_birth + ",\
-         contact_number = '" + contact_number + "',\
-         address = '" + address + "',\
-         doctor_id = " + doctor_id + "\
-     WHERE patient_id = " + id;
+    var sql = "UPDATE patientinfo SET date_of_birth = '" + date_of_birth + "', contact_number ='" + contact_number + "',  address= '" + address + "' WHERE patient_id= " + id;
 
      mySQLConnection.query(sql, function(error, rows, fields){
         if(error){
