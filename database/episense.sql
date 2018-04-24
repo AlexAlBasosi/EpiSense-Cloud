@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 21, 2018 at 06:03 PM
+-- Generation Time: Apr 24, 2018 at 05:06 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 5.6.33
 
@@ -46,7 +46,6 @@ INSERT INTO `doctorinfo` (`doctor_id`, `first_name`, `last_name`, `contact_numbe
 (0, 'Shaza', 'Kazia', '', '', 'stuff', ''),
 (1, 'Jones', 'McMillan', '+971535930583', 'Somewhere', 'Something', '12PM - 3PM'),
 (2, 'Alexander', 'Al Basosi', '', '', 'surgery', ''),
-(4, 'Alexander', 'Al Basosi', '', '', 'surgery', ''),
 (5, 'George', 'McMillan', '', '', 'more', ''),
 (6, 'Shaza', 'Kazia', '', '', 'being a potato', ''),
 (7, 'Rabia', 'Rauf', '', '', 'art', '');
@@ -71,7 +70,6 @@ INSERT INTO `doctor_logindetails` (`doctor_id`, `email`, `doctor_password`) VALU
 (1, 'jones@mcmillan.com', 'password'),
 (2, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
 (0, 'shaza@kazia.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
-(4, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
 (5, 'george@mill.com', '10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE='),
 (6, 'shaza@khalifa.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
 (7, 'rabia@rauf.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=');
@@ -97,7 +95,16 @@ INSERT INTO `emergencycontacts` (`patient_id`, `contact_number`, `first_name`, `
 (2, '05034342341', 'Rabia', 'Rauf'),
 (2, '0505830385', 'John', 'Smith'),
 (2, '0503958273', 'Simyan', 'Anwar'),
-(2, '0502950384', 'Samia', 'Ahmad');
+(2, '0502950384', 'Samia', 'Ahmad'),
+(1, ' 971505849382', 'Shaza', 'Kazia'),
+(2, 'undefined', 'George', 'Michaelcontact_number 971503859472'),
+(2, 'undefined', 'shaza', 'kazia'),
+(1, ' 971505849382', 'Shaza', 'Kazia'),
+(1, ' 971505849382', 'Shaza', 'Kazia'),
+(2, 'undefined', 'Jack', 'Sparrow'),
+(2, 'undefined', 'Alexander', 'Al Basosi'),
+(2, 'undefined', 'Osama', 'Khalifa'),
+(2, '0503493920', 'John', 'Barrowman');
 
 -- --------------------------------------------------------
 
@@ -114,26 +121,31 @@ CREATE TABLE `patientinfo` (
   `date_of_birth` text NOT NULL,
   `contact_number` text NOT NULL,
   `address` text NOT NULL,
-  `doctor_id` int(11) NOT NULL
+  `doctor_id` int(11) NOT NULL,
+  `sign_up_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `date` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `patientinfo`
 --
 
-INSERT INTO `patientinfo` (`patient_id`, `first_name`, `last_name`, `gender`, `age`, `date_of_birth`, `contact_number`, `address`, `doctor_id`) VALUES
-(1, 'Alexander', 'Al Basosi', 'm', 22, '12/06/1995', '+971503494591', 'Al Barsha 1', 1),
-(2, 'Victoria', 'Ashley', 'f', 0, '06/09/2005', '+97150859381', 'Al Barsha 1', 1),
-(3, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(4, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(5, 'donna', 'venezuela', '', 0, '', '', '', 1),
-(6, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(8, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(9, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(10, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(11, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(12, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0),
-(13, 'Alexander', 'Al Basosi', '', 0, '', '', '', 0);
+INSERT INTO `patientinfo` (`patient_id`, `first_name`, `last_name`, `gender`, `age`, `date_of_birth`, `contact_number`, `address`, `doctor_id`, `sign_up_timestamp`, `date`) VALUES
+(0, '', '', '', 0, '', '', '', 0, '2018-04-24 11:14:13', 'Mon Apr 23 2018'),
+(1, 'Alexander', 'Al Basosi', 'm', 22, '12/06/1995', '+971503494591', 'Al Barsha 1', 1, '2018-04-24 11:17:20', 'Mon Apr 23 2018'),
+(2, 'Victoria', 'Ashley', 'f', 0, '06/09/2005', '+97150859381', 'Al Barsha 1', 2, '2018-04-24 11:17:23', 'Mon Apr 23 2018'),
+(3, 'Karen', 'Gillan', 'f', 23, '12/04/1995', '0503489283', '4 Chesterford Road', 2, '2018-04-24 11:17:24', 'Mon Apr 23 2018'),
+(4, 'John', 'Barrowman', 'm', 45, '12/4/1970', '0503859038', '5 Gaiskell House', 2, '2018-04-24 11:17:27', 'Mon Apr 23 2018'),
+(5, 'donna', 'venezuela', '', 0, '', '', '', 1, '2018-04-24 11:17:29', 'Mon Apr 23 2018'),
+(6, 'Katherine', 'Heigl', '', 33, '12/06/1995', '0503829483', 'Lulu Building', 2, '2018-04-24 11:17:32', 'Mon Apr 23 2018'),
+(8, 'Matt', 'Smith', '', 0, '', '', '', 0, '2018-04-24 11:17:37', 'Mon Apr 23 2018'),
+(9, 'Matt', 'Smith', '', 0, '', '', '', 4, '2018-04-24 11:17:40', 'Mon Apr 23 2018'),
+(10, 'Matt', 'Smith', '', 0, '', '', '', 2, '2018-04-24 11:17:42', 'Mon Apr 23 2018'),
+(12, 'John', 'Smith', '', 0, '', '', '', 2, '2018-04-24 11:17:46', 'Mon Apr 23 2018'),
+(13, 'Beschier', 'Hassooni', '', 0, '', '', '', 2, '2018-04-24 11:17:48', 'Mon Apr 23 2018'),
+(14, 'Mary', 'Jane', '', 0, '', '', '', 2, '2018-04-24 11:17:50', 'Mon Apr 23 2018'),
+(15, 'Jane', 'Doe', '', 0, '', '', '', 2, '0000-00-00 00:00:00', 'Tue Apr 24 2018'),
+(16, 'Jane', 'Doe', '', 0, '', '', '', 2, '0000-00-00 00:00:00', '');
 
 -- --------------------------------------------------------
 
@@ -154,15 +166,14 @@ CREATE TABLE `patient_logindetails` (
 INSERT INTO `patient_logindetails` (`patient_id`, `email`, `patient_password`) VALUES
 (5, 'donna@venezuela.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
 (2, 'victoria@ashley.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
-(3, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
-(4, 'alex@albasosi.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
-(6, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
-(8, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
-(9, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
-(10, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
-(11, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
-(12, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM='),
-(13, 'alex@albasosi.com', 'MEmh+DJ+AhXqkkueTgTNSw/xgAx0pTbZuB09jO2ZlNM=');
+(8, 'matt@smith.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(9, 'matt@smith.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(10, 'matt@smith.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(12, 'matt@smith.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(13, 'beschier@hasooni.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(14, 'mary@jane.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(15, 'jane@doe.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg='),
+(16, 'jane@doe.com', 'XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=');
 
 -- --------------------------------------------------------
 
@@ -172,20 +183,26 @@ INSERT INTO `patient_logindetails` (`patient_id`, `email`, `patient_password`) V
 
 CREATE TABLE `seizure_history` (
   `patient_id` int(11) NOT NULL,
-  `day` text NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `date` text NOT NULL,
-  `time` text NOT NULL
+  `isSeizure` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `seizure_history`
 --
 
-INSERT INTO `seizure_history` (`patient_id`, `day`, `date`, `time`) VALUES
-(2, 'Thursday', '12/2/2018', '4:00PM'),
-(2, 'Friday', '15/2/2018', '4:00AM'),
-(2, 'Saturday', '12/06/2017', '9PM'),
-(1, 'Friday', '12/03/2015', '3:00PM');
+INSERT INTO `seizure_history` (`patient_id`, `timestamp`, `date`, `isSeizure`) VALUES
+(2, '2018-04-24 22:36:05', 'Tue Apr 15 2018', 1),
+(2, '2018-04-24 12:40:03', 'Tue Apr 24 2018', 1),
+(2, '2018-04-24 12:40:03', 'Tue Apr 24 2018', 1),
+(2, '2018-04-24 12:40:03', 'Tue Apr 24 2018', 1),
+(2, '2018-04-20 01:31:19', 'Fri Apr 20 2018', 1),
+(2, '2018-04-20 01:31:19', 'Fri Apr 20 2018', 1),
+(2, '2018-04-20 01:31:19', 'Fri Apr 20 2018', 1),
+(3, '2018-04-20 01:31:19', 'Fri Apr 20 2018', 1),
+(3, '2018-04-20 01:31:19', 'Fri Apr 20 2018', 1),
+(4, '2018-04-20 01:31:19', 'Fri Apr 20 2018', 1);
 
 --
 -- Indexes for dumped tables
