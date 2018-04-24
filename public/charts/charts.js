@@ -5,8 +5,20 @@ if(location.search){
     var doctorEmail = sessionStorage.getItem("loginEmail");
 }
 
-console.log("Patient ID: " + patientID);
-console.log("Doctor Email: " + doctorEmail);
+ var getTimestampsURL = "http://localhost:3001/patients/" + patientID + "/history/timestamps";
+
+ var timeArray;
+
+$.ajax({
+  url: getTimestampsURL,
+  type: 'GET',
+  success: function(res) {
+      timeArray = res;
+
+      for(var i = 0; i < timeArray.length; i++){
+      }
+  }
+});
 
 var ctx = document.getElementById("lineChart").getContext('2d');
 

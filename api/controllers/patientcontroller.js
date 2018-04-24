@@ -76,9 +76,11 @@ exports.sign_up = function(req, res){
         }
 
         if(successFlag == true){
+            var timestamp = new Date();
+
             console.log("Adding to the database...");
-            var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name, doctor_id) VALUES ('\
-            " + patientId + "', '" + firstName + "', '" + lastName + "', '" + doctorID + "')";
+            var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name, doctor_id, signup_timestamp) VALUES ('\
+            " + patientId + "', '" + firstName + "', '" + lastName + "', '" + doctorID + "', '" + timestamp + "')";
 
             successFlag = true;
 
@@ -465,3 +467,55 @@ exports.add_seizure = function(req, res){
         }
     });
 };
+
+exports.get_timestamps_array = function(req, res){
+    var patientID = req.params.patientID;
+
+    console.log("Querying from the database...");
+
+    var sql = "SELECT timestamp FROM seizure_history WHERE patient_id=" + patientID;
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "day": i+1,
+                    "date": rows[i].timestamp,
+                    "flag": false
+                }
+            }
+
+            recordJson.sort(function(a,b){
+                return new Date(a.date) - new Date(b.date);
+            });
+
+            var countedJSON = [];
+            var lengthIndex = recordJson.length;
+            var arrayIndex = 0;
+
+            for(var i = 0; i < recordJson.length; i++){
+                for(var j = i; j < lengthIndex; j++){
+
+                    if(recordJson[i].date.toDateString() === recordJson[j].date.toDateString()){
+
+                        var time = recordJson[j].date;
+
+                        countedJSON[i] = time;
+
+                        arrayIndex++;
+                    }
+
+                    lengthIndex--;
+                }
+            }
+
+            res.send(countedJSON);
+        }
+    });
+}

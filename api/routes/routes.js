@@ -16,6 +16,9 @@ module.exports = function(app) {
       .get(patientcontroller.get_seizure_history)
       .post(patientcontroller.add_seizure)
 
+    app.route('/patients/:patientID/history/timestamps')
+      .get(patientcontroller.get_timestamps_array)
+
     app.route('/patients/login')
       .post(patientcontroller.login)
 
