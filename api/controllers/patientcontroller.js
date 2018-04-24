@@ -35,8 +35,9 @@ exports.get_all_records = function(req, res){
                     "date_of_birth": rows[i].date_of_birth,
                     "contact_number": rows[i].contact_number,
                     "address": rows[i].address,
-                    "emergency_contact_id": rows[i].emergency_contact_id,
-                    "doctor_id": rows[i].doctor_id
+                    "doctor_id": rows[i].doctor_id,
+                    "sign_up_timestamp": rows[i].sign_up_timestamp,
+                    "date": rows[i].date
                 }
             }
 
@@ -162,9 +163,10 @@ exports.get_specific_record = function(req, res){
                                     "contact_number": rows[0].contact_number,
                                     "address": rows[0].address,
                                     "email": innerrows[0].email,
-                                    "emergency_contact_id": rows[0].emergency_contact_id,
                                     "doctor_id": rows[0].doctor_id,
-                                    "doctor_name": doctorrows[0].first_name
+                                    "doctor_name": doctorrows[0].first_name,
+                                    "sign_up_timestamp": rows[i].sign_up_timestamp,
+                                    "date": rows[i].date
                                 }
         
                                 var jsonObj = {
@@ -433,7 +435,7 @@ exports.get_seizure_history = function(req, res){
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "patient_id": rows[i].patient_id,
-                    "timestamp": rows[i].timestamp,
+                    "timestamp": rows[i].timestamp.toDateString(),
                     "isSeizure": rows[i].isSeizure
                 }
             }
@@ -486,8 +488,7 @@ exports.get_timestamps_array = function(req, res){
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "day": i+1,
-                    "date": rows[i].timestamp,
-                    "flag": false
+                    "date": rows[i].timestamp
                 }
             }
 
@@ -497,25 +498,109 @@ exports.get_timestamps_array = function(req, res){
 
             var countedJSON = [];
             var lengthIndex = recordJson.length;
-            var arrayIndex = 0;
+            var arr = [];
+
+            console.log(recordJson);
 
             for(var i = 0; i < recordJson.length; i++){
-                for(var j = i; j < lengthIndex; j++){
+                arr[i] = recordJson[i].date.toDateString();
+            }
 
-                    if(recordJson[i].date.toDateString() === recordJson[j].date.toDateString()){
+            uniqueArray = arr.filter(function(item, pos, self) {
+                return self.indexOf(item) == pos;
+            })
 
-                        var time = recordJson[j].date;
+            res.send(uniqueArray);
+        }
+    });
+};
 
-                        countedJSON[i] = time;
+exports.get_number_of_seizures = function(req, res){
+    var patientID = req.params.patientID;
+    var timestamp = new Date(req.query.timestamp);
+    var timestampdate = timestamp.toDateString();
 
-                        arrayIndex++;
-                    }
 
-                    lengthIndex--;
+    var sql = "SELECT * FROM seizure_history WHERE patient_id=" + patientID + " AND timestamp='" + timestamp + "' AND isSeizure=1";
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "timestamp": rows[i].timestamp,
+                    "isSeizure": rows[i].isSeizure
                 }
             }
 
-            res.send(countedJSON);
+            if(recordJson[0] == 0){
+                res.send("0");
+            } else {
+                res.send(recordJson);
+            }
         }
     });
-}
+};
+
+exports.add_dates = function(req, res){
+    var id = req.params.patientID;
+
+    var sql = "SELECT * FROM patientinfo";
+
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error){
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
+
+            var recordJson = [rows.length];
+            var datestamps = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "first_name": rows[i].first_name,
+                    "last_name": rows[i].last_name,
+                    "gender": rows[i].gender,
+                    "age": rows[i].age,
+                    "date_of_birth": rows[i].date_of_birth,
+                    "contact_number": rows[i].contact_number,
+                    "address": rows[i].address,
+                    "emergency_contact_id": rows[i].emergency_contact_id,
+                    "doctor_id": rows[i].doctor_id,
+                    "sign_up_timestamp": rows[i].sign_up_timestamp,
+                    "date": rows[i].date
+                }
+            }
+
+            for(var i = 0; i < recordJson.length; i++){
+                var time = new Date(recordJson[i].sign_up_timestamp);
+                datestamps[i] = time.toDateString();
+            }
+
+             
+
+            for(var i = 0; i < datestamps.length; i++){
+                var sql = "UPDATE patientinfo SET date='" + datestamps[i] + "' WHERE patient_id=" + id;
+                mySQLConnection.query(sql, function(error, rows, fields){
+                    if(error){
+                        console.log("Query failed.");
+                        console.log(error);
+                    } else {
+                        console.log("Query successful.");
+                    }
+                });
+            }
+        }
+
+        res.send(recordJson);
+
+    });
+};

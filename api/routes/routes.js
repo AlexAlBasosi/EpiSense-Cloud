@@ -19,6 +19,9 @@ module.exports = function(app) {
     app.route('/patients/:patientID/history/timestamps')
       .get(patientcontroller.get_timestamps_array)
 
+    app.route('/patients/:patientID/history/timestamps/numberofseizures')
+      .get(patientcontroller.get_number_of_seizures)
+
     app.route('/patients/login')
       .post(patientcontroller.login)
 
@@ -33,6 +36,9 @@ module.exports = function(app) {
     //temporary API, for testing
     app.route('/logindetails')
       .get(patientcontroller.get_login_details)
+
+    app.route('/adddates/:patientID')
+      .post(patientcontroller.add_dates)
 
     
     //doctors
