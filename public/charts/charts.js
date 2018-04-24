@@ -43,6 +43,9 @@ $.ajax({
         console.log(labelArray);
 
         var ctx = document.getElementById("lineChart").getContext('2d');
+        ctx.canvas.width=ctx.canvas.originalwidth;
+        ctx.canvas.height=ctx.canvas.originalheight;
+
 
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -86,6 +89,9 @@ $.ajax({
 
 
 var ctx = document.getElementById("pieChart").getContext('2d');
+
+ctx.canvas.width=ctx.canvas.originalwidth;
+ctx.canvas.height=ctx.canvas.originalheight;
 
 var myChart = new Chart(ctx, {
     type: 'pie',
