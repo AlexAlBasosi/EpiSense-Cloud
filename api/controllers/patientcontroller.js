@@ -527,8 +527,36 @@ exports.get_timestamps_array_times = function(req, res){
         for(var i = 0; i < rows.length; i++){
             seizuresArray.push(rows[i].timestamp);
         }
+
+        var timestamp = new Date();
+        console.log(timestamp.getHours());
+
+        var morningCount = 0; //6-11
+        var afternoonCount = 0; //12-16
+        var eveningCount = 0; //17-19
+        var nightCount = 0; //20-23, 0-5
+
+        for(var i = 0; i < seizuresArray.length; i++){
+            if((seizuresArray[i].getHours() >= 0 && seizuresArray[i].getHours() <= 5) || (seizuresArray[i].getHours() >= 20 && seizuresArray[i].getHours() <= 23)){
+                nightCount++;
+            } else if(seizuresArray[i].getHours() >= 6 && seizuresArray[i].getHours() <= 11){
+                morningCount++;
+            } else if(seizuresArray[i].getHours() >= 12 && seizuresArray[i].getHours() <= 16){
+                afternoonCount++;
+            } else if(seizuresArray[i].getHours() >= 17 && seizuresArray[i].getHours() <= 19){
+                eveningCount++;
+            }
+        }
+
+        var timeOfDay = {
+            "morning": morningCount,
+            "afternoon": afternoonCount,
+            "evening": eveningCount,
+            "night": nightCount
+        }
+
         
-        res.send(seizuresArray);
+        res.send(timeOfDay);
     })
 };
 
