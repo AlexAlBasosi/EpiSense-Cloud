@@ -36,8 +36,7 @@ exports.get_all_records = function(req, res){
                     "contact_number": rows[i].contact_number,
                     "address": rows[i].address,
                     "doctor_id": rows[i].doctor_id,
-                    "sign_up_timestamp": rows[i].sign_up_timestamp,
-                    "date": rows[i].date
+                    "sign_up_timestamp": rows[i].sign_up_timestamp
                 }
             }
 
@@ -82,8 +81,8 @@ exports.sign_up = function(req, res){
             var date = timestamp.toDateString();
 
             console.log("Adding to the database...");
-            var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name, doctor_id, sign_up_timestamp, date) VALUES ('\
-            " + patientId + "', '" + firstName + "', '" + lastName + "', '" + doctorID + "', '" + timestamp + "', '" + date + "')";
+            var insertIntoPatientInfoTable = "INSERT INTO patientinfo (patient_id, first_name, last_name, doctor_id, sign_up_timestamp) VALUES ('\
+            " + patientId + "', '" + firstName + "', '" + lastName + "', '" + doctorID + "', '" + timestamp + "')";
 
             successFlag = true;
 
@@ -167,8 +166,7 @@ exports.get_specific_record = function(req, res){
                                     "email": innerrows[0].email,
                                     "doctor_id": rows[0].doctor_id,
                                     "doctor_name": doctorrows[0].first_name,
-                                    "sign_up_timestamp": rows[i].sign_up_timestamp,
-                                    "date": rows[i].date
+                                    "sign_up_timestamp": rows[i].sign_up_timestamp
                                 }
         
                                 var jsonObj = {
@@ -454,11 +452,12 @@ exports.get_seizure_history = function(req, res){
 exports.add_seizure = function(req, res){
     var id = req.params.patientID;
     var timestamp = req.query.timestamp;
+    var date = new Date(timestamp).toDateString();
     var isSeizure = req.query.isSeizure;
 
     console.log("Adding to the database...");
-    var insertIntoSeizureHistoryTable = "INSERT INTO seizure_history (patient_id, timestamp, isSeizure) VALUES ('\
-    " + id + "', '" + timestamp + "', '" + isSeizure +  "')";
+    var insertIntoSeizureHistoryTable = "INSERT INTO seizure_history (patient_id, timestamp, date, isSeizure) VALUES ('\
+    " + id + "', '" + timestamp + "', '" + date + "', '" + isSeizure +  "')";
 
     mySQLConnection.query(insertIntoSeizureHistoryTable, function(error, rows, fields){
         if(error){
@@ -490,7 +489,7 @@ exports.get_timestamps_array = function(req, res){
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "day": i+1,
-                    "date": rows[i].timestamp
+                    "date": new Date(rows[i].timestamp)
                 }
             }
 
@@ -502,10 +501,10 @@ exports.get_timestamps_array = function(req, res){
             var lengthIndex = recordJson.length;
             var arr = [];
 
-            console.log(recordJson);
-
             for(var i = 0; i < recordJson.length; i++){
-                arr[i] = recordJson[i].date.toDateString();
+                if(recordJson[0] !== 0){
+                    arr[i] = recordJson[i].date.toDateString();
+                }
             }
 
             uniqueArray = arr.filter(function(item, pos, self) {
@@ -550,6 +549,44 @@ exports.get_number_of_seizures = function(req, res){
     });
 };
 
+exports.get_number_of_seizures_by_day = function(req, res){
+    var patientID = req.params.patientID;
+    var date = req.query.date;
+
+    console.log("Patient ID: " + patientID);
+    console.log("Date: " + date);
+
+    var sql = "SELECT * FROM seizure_history WHERE patient_id=" + patientID + " AND date='" + date + "' AND isSeizure=1";
+
+    console.log(sql);
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+            console.log(error);
+        } else {
+            console.log("Query successful.");
+
+            var recordJson = [rows.length];
+
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "timestamp": rows[i].timestamp.toDateString(),
+                    "isSeizure": rows[i].isSeizure
+                }
+            }
+
+            if(recordJson[0] == 0){
+                res.send("0");
+            } else {
+                res.send(recordJson.length.toString());
+            }
+
+            //res.send(recordJson);
+        }
+    });
+}
+
 exports.get_number_of_seizures_shaza = function(req, res){
     var id = req.params.patientID;
 
@@ -584,7 +621,7 @@ exports.get_number_of_seizures_shaza = function(req, res){
 exports.add_dates = function(req, res){
     var id = req.params.patientID;
 
-    var sql = "SELECT * FROM patientinfo";
+    var sql = "SELECT * FROM seizure_history";
 
 
     mySQLConnection.query(sql, function(error, rows, fields){
@@ -599,29 +636,21 @@ exports.add_dates = function(req, res){
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "patient_id": rows[i].patient_id,
-                    "first_name": rows[i].first_name,
-                    "last_name": rows[i].last_name,
-                    "gender": rows[i].gender,
-                    "age": rows[i].age,
-                    "date_of_birth": rows[i].date_of_birth,
-                    "contact_number": rows[i].contact_number,
-                    "address": rows[i].address,
-                    "emergency_contact_id": rows[i].emergency_contact_id,
-                    "doctor_id": rows[i].doctor_id,
-                    "sign_up_timestamp": rows[i].sign_up_timestamp,
-                    "date": rows[i].date
+                    "timestamp": rows[i].timestamp,
+                    "date": rows[i].date,
+                    "isSeizure": rows[i].isSeizure
                 }
             }
 
             for(var i = 0; i < recordJson.length; i++){
-                var time = new Date(recordJson[i].sign_up_timestamp);
+                var time = new Date(recordJson[i].timestamp);
                 datestamps[i] = time.toDateString();
             }
 
              
 
             for(var i = 0; i < datestamps.length; i++){
-                var sql = "UPDATE patientinfo SET date='" + datestamps[i] + "' WHERE patient_id=" + id;
+                var sql = "UPDATE seizure_history SET date='" + datestamps[i] + "' WHERE patient_id=" + id;
                 mySQLConnection.query(sql, function(error, rows, fields){
                     if(error){
                         console.log("Query failed.");
