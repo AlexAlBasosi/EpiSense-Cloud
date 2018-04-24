@@ -166,7 +166,7 @@ exports.get_specific_record = function(req, res){
                                     "email": innerrows[0].email,
                                     "doctor_id": rows[0].doctor_id,
                                     "doctor_name": doctorrows[0].first_name,
-                                    "sign_up_timestamp": rows[i].sign_up_timestamp
+                                    "sign_up_timestamp": rows[0].sign_up_timestamp
                                 }
         
                                 var jsonObj = {
@@ -516,6 +516,22 @@ exports.get_timestamps_array = function(req, res){
     });
 };
 
+exports.get_timestamps_array_times = function(req, res){
+    var patientID = req.params.patientID;
+
+    var seizuresArray = [];
+
+    var sql = "SELECT timestamp FROM seizure_history WHERE patient_id=" + patientID;
+
+    mySQLConnection.query(sql, function(error, rows, fields){
+        for(var i = 0; i < rows.length; i++){
+            seizuresArray.push(rows[i].timestamp);
+        }
+        
+        res.send(seizuresArray);
+    })
+};
+
 exports.get_number_of_seizures = function(req, res){
     var patientID = req.params.patientID;
     var timestamp = new Date(req.query.timestamp);
@@ -581,8 +597,6 @@ exports.get_number_of_seizures_by_day = function(req, res){
             } else {
                 res.send(recordJson.length.toString());
             }
-
-            //res.send(recordJson);
         }
     });
 }
@@ -609,9 +623,29 @@ exports.get_number_of_seizures_shaza = function(req, res){
             }
 
             if(recordJson[0] == 0){
-                res.send("0");
+                var numberOfSeizuresArray = [];
+
+                numberOfSeizuresArray[0] = {
+                    "numberOfSeizures": 0
+                }
+
+                var seizureJSON = {
+                    "Seizures": numberOfSeizuresArray
+                }
+
+                res.send(seizureJSON);
             } else {
-                res.send(recordJson.length.toString());
+                var numberOfSeizuresArray = [];
+
+                numberOfSeizuresArray[0] = {
+                    "numberOfSeizures": recordJson.length
+                }
+
+                var seizureJSON = {
+                    "Seizures": numberOfSeizuresArray
+                }
+
+                res.send(seizureJSON);
             }
         }
     });

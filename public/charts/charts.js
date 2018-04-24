@@ -87,6 +87,16 @@ $.ajax({
   }
 });
 
+var getTimestampsFullURL = "/patients/" + patientID + "/history/timestamps/times";
+
+$.ajax({
+    url: getTimestampsFullURL,
+    type: 'GET',
+    success: function(res) {
+      console.log(res);
+    }, 
+    async: false
+  });
 
 var ctx = document.getElementById("pieChart").getContext('2d');
 
