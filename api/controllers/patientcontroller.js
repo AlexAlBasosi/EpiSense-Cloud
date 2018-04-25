@@ -187,7 +187,7 @@ exports.get_specific_record = function(req, res){
                                             "date_of_birth": rows[0].date_of_birth,
                                             "contact_number": rows[0].contact_number,
                                             "address": rows[0].address,
-                                            //"email": innerrows[0].email,
+                                            "email": innerrows[0].email,
                                             "doctor_id": rows[0].doctor_id,
                                             "doctor_name": doctorrows[0].first_name,
                                             "sign_up_timestamp": rows[0].sign_up_timestamp,
