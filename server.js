@@ -1,5 +1,6 @@
 var express = require('express');
 var mysql = require('mysql');
+var md5File = require('md5-file');
 var app = express();
 port = process.env.PORT || 3001;
 
