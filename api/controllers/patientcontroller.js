@@ -145,39 +145,66 @@ exports.get_specific_record = function(req, res){
                             console.log(innererror);
                         } else {
 
-                            console.log(innerrows);
-                            var sql = "SELECT * FROM patientinfo";
+                            var seizuresql = "SELECT * FROM seizure_history WHERE patient_id=" + id + " AND isSeizure=1";
+
+                            console.log(seizuresql);
+
+                            mySQLConnection.query(seizuresql, function(seizureerror, seizurerows, seizurefields){
+                                if(seizureerror) {
+                                    console.log("Query failed.");
+                                    console.log(error);
+                                } else {
+                                    console.log("Query successful.");
+                        
+                                    var seizureJSON = [seizurerows.length];
+                        
+                                    for(var i = 0; i < seizurerows.length; i++){
+                                        seizureJSON[i] = {
+                                            "patient_id": seizurerows[i].patient_id,
+                                            "timestamp": seizurerows[i].timestamp.toDateString(),
+                                            "isSeizure": seizurerows[i].isSeizure
+                                        }
+                                    }
+
+                                    var number_of_seizures;
+
+                                    if(seizureJSON[0] == 0){
+                                        number_of_seizures = 0;
+                                    } else {
+                                        number_of_seizures = seizureJSON.length;
+                                    }
         
-                            console.log("Query successful.");
-        
-                            if(rows.length > 0){
-        
-                                var recordJson = [1];
-        
-                                recordJson[0] = {
-                                    "patient_id": rows[0].patient_id,
-                                    "first_name": rows[0].first_name,
-                                    "last_name": rows[0].last_name,
-                                    "gender": rows[0].gender,
-                                    "age": rows[0].age,
-                                    "date_of_birth": rows[0].date_of_birth,
-                                    "contact_number": rows[0].contact_number,
-                                    "address": rows[0].address,
-                                    "email": innerrows[0].email,
-                                    "doctor_id": rows[0].doctor_id,
-                                    "doctor_name": doctorrows[0].first_name,
-                                    "sign_up_timestamp": rows[0].sign_up_timestamp
+                                    if(rows.length > 0){
+                
+                                        var recordJson = [1];
+                
+                                        recordJson[0] = {
+                                            "patient_id": rows[0].patient_id,
+                                            "first_name": rows[0].first_name,
+                                            "last_name": rows[0].last_name,
+                                            "gender": rows[0].gender,
+                                            "age": rows[0].age,
+                                            "date_of_birth": rows[0].date_of_birth,
+                                            "contact_number": rows[0].contact_number,
+                                            "address": rows[0].address,
+                                            //"email": innerrows[0].email,
+                                            "doctor_id": rows[0].doctor_id,
+                                            "doctor_name": doctorrows[0].first_name,
+                                            "sign_up_timestamp": rows[0].sign_up_timestamp,
+                                            "number_of_seizures": number_of_seizures
+                                        }
+                
+                                        var jsonObj = {
+                                            "Patients": recordJson
+                                        }
+                
+                                        res.json(jsonObj);
+                
+                                    } else {
+                                        res.sendStatus(404);
+                                    }
                                 }
-        
-                                var jsonObj = {
-                                    "Patients": recordJson
-                                }
-        
-                                res.json(jsonObj);
-        
-                            } else {
-                                res.sendStatus(404);
-                            }
+                            });
                         }
                     }
                 });
@@ -432,10 +459,13 @@ exports.get_seizure_history = function(req, res){
 
             var recordJson = [rows.length];
 
+
+
             for(var i = 0; i < rows.length; i++){
                 recordJson[i] = {
                     "patient_id": rows[i].patient_id,
-                    "timestamp": rows[i].timestamp.toDateString(),
+                    "timestamp": rows[i].timestamp.getHours() + ":" + rows[i].timestamp.getMinutes(),
+                    "date": rows[i].date,
                     "isSeizure": rows[i].isSeizure
                 }
             }
