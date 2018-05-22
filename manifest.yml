@@ -1,0 +1,7 @@
+---
+applications:
+- name: episense
+  host: episense
+  memory: 256M
+  services:
+    - compose-for-mysql-episense
