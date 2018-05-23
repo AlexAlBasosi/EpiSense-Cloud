@@ -1,53 +1,50 @@
-var mySQLConnection = require('../models/model');
 var hash = require('js-sha256');
 var crypto = require('crypto');
 
-mySQLConnection.connect(function(err) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("Connection to database made.");
-    }
-});
+var database = require('./episense');
 
-// //the following methods query the patientinfo table
-// exports.patient_get_all_records = function(req, res){
+database.create();
 
-//     console.log("Querying from the database...");
-//     var sql = "SELECT * FROM patientinfo";
-//     mySQLConnection.query(sql, function(error, rows, fields){
-//         if(error) {
-//             console.log("Query failed.");
-//         } else {
-//             console.log("Query successful.");
+var mySQLConnection = require('../models/model');
 
-//             console.log(rows);
+//the following methods query the patientinfo table
+exports.patient_get_all_records = function(req, res){
 
-//             var recordJson = [rows.length];
+    console.log("Querying from the database...");
+    var sql = "SELECT * FROM patientinfo";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
 
-//             for(var i = 0; i < rows.length; i++){
-//                 recordJson[i] = {
-//                     "patient_id": rows[i].patient_id,
-//                     "first_name": rows[i].first_name,
-//                     "last_name": rows[i].last_name,
-//                     "gender": rows[i].gender,
-//                     "age": rows[i].age,
-//                     "date_of_birth": rows[i].date_of_birth,
-//                     "contact_number": rows[i].contact_number,
-//                     "address": rows[i].address,
-//                     "doctor_id": rows[i].doctor_id,
-//                     "sign_up_timestamp": rows[i].sign_up_timestamp
-//                 }
-//             }
+            console.log(rows);
 
-//             var jsonObj = {
-//                 "Patients": recordJson
-//             }
+            var recordJson = [rows.length];
 
-//             res.json(jsonObj);
-//         }
-//     });
-// };
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "first_name": rows[i].first_name,
+                    "last_name": rows[i].last_name,
+                    "gender": rows[i].gender,
+                    "age": rows[i].age,
+                    "date_of_birth": rows[i].date_of_birth,
+                    "contact_number": rows[i].contact_number,
+                    "address": rows[i].address,
+                    "doctor_id": rows[i].doctor_id,
+                    "sign_up_timestamp": rows[i].sign_up_timestamp
+                }
+            }
+
+            var jsonObj = {
+                "Patients": recordJson
+            }
+
+            res.json(jsonObj);
+        }
+    });
+};
 
 // exports.patient_sign_up = function(req, res){
 
@@ -339,37 +336,37 @@ mySQLConnection.connect(function(err) {
 // };
 
 // //the following methods query the emergencycontacts table
-// exports.get_emergency_contacts = function(req, res){
+exports.get_emergency_contacts = function(req, res){
 
-//     console.log("Querying from the database...");
-//     var sql = "SELECT * FROM emergencycontacts";
-//     mySQLConnection.query(sql, function(error, rows, fields){
-//         if(error) {
-//             console.log("Query failed.");
-//         } else {
-//             console.log("Query successful.");
+    console.log("Querying from the database...");
+    var sql = "SELECT * FROM emergencycontacts";
+    mySQLConnection.query(sql, function(error, rows, fields){
+        if(error) {
+            console.log("Query failed.");
+        } else {
+            console.log("Query successful.");
 
-//             console.log(rows);
+            console.log(rows);
 
-//             var recordJson = [rows.length];
+            var recordJson = [rows.length];
 
-//             for(var i = 0; i < rows.length; i++){
-//                 recordJson[i] = {
-//                     "patient_id": rows[i].patient_id,
-//                     "contact_number": rows[i].contact_number,
-//                     "first_name": rows[i].first_name,
-//                     "last_name": rows[i].last_name
-//                 }
-//             }
+            for(var i = 0; i < rows.length; i++){
+                recordJson[i] = {
+                    "patient_id": rows[i].patient_id,
+                    "contact_number": rows[i].contact_number,
+                    "first_name": rows[i].first_name,
+                    "last_name": rows[i].last_name
+                }
+            }
 
-//             var jsonObj = {
-//                 "Contacts": recordJson
-//             }
+            var jsonObj = {
+                "Contacts": recordJson
+            }
 
-//             res.json(jsonObj);
-//         }
-//     });
-// };
+            res.json(jsonObj);
+        }
+    });
+};
 
 // exports.get_specific_contact = function(req, res){
 //     var id = req.params.patientID;

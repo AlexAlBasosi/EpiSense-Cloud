@@ -3,8 +3,8 @@ module.exports = function(app) {
   //patients
     var controller = require('../controllers/controller');
 
-//     app.route('/patients')
-//       .get(controller.patient_get_all_records)
+    app.route('/patients')
+      .get(controller.patient_get_all_records)
 //       .post(controller.patient_sign_up)
 
 //     app.route('/patients/:patientID')
@@ -34,8 +34,8 @@ module.exports = function(app) {
 //     app.route('/patients/login')
 //       .post(controller.patient_login)
 
-//     app.route('/contacts')
-//       .get(controller.get_emergency_contacts)
+    app.route('/contacts')
+      .get(controller.get_emergency_contacts)
 //       .post(controller.add_emergency_contact)
     
 //     app.route('/contacts/:patientID')
